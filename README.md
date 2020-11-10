@@ -18,7 +18,7 @@ BCFTools v1.9 (using htslib 1.9)
 MAFFT v 7.450
 SPAdes v 3.11.1
 Seqtk v 1.3-r107-dirty
-Vcfutils.pl (from bcftools v 1.9, but also included in zip file)
+Vcfutils.pl (from bcftools v 1.9)
 Trimal v 1.2rev59
 Usearch v 11.0.667_i86linux32
 
