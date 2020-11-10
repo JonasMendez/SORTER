@@ -91,7 +91,7 @@ BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
 	workingdirectory/annotatedupes
 	workingdirectory/keeplongest.py
 5. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/
-		REFERENCE FILES MAY HAVE ALTERNATIVE FORMATING, BUT TARGET GENES MUST BE THE BEGINNING OF THE STRING (after '>') FORMATTED AS L#_ WITH L1_ - LN_ (N=number of target reference loci) 
+		REFERENCE FILES MAY HAVE ALTERNATIVE FORMATING, BUT TARGET LOCI MUST BE THE BEGINNING OF THE STRING (after '>') FORMATTED AS L#_ WITH L1_ - LN_ (N=number of target reference loci) 
 		AS FOLLOWS:
 		>L1_*
 		>L2_*
