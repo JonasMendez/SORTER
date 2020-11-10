@@ -111,7 +111,6 @@ def replaceAll(file,searchExp,replaceExp):
             line = line.replace(searchExp,replaceExp)
         sys.stdout.write(line)
 
-#Trim/Spades Assembly
 
 #Trim Reads if Needed
 if args.trimgalore is 'T':
@@ -615,6 +614,7 @@ else:
 		#Rewrite polyploid names as >WA01_polyploid_phase >WA01_polyploid_diploidhit_phase
 		for folder in os.listdir(phaseset):
 			if 'fastq' in folder:
+				print('Preparing Phase(0/1) Annotation alignments')
 				os.chdir(phaseset+folder+'/diploidclusters/')
 				sample=folder.split('_')[0] +'_' + folder.split('_')[1]
 				for file in os.listdir(phaseset+folder+'/diploidclusters/'):
@@ -638,11 +638,12 @@ else:
 									print(linspl)
 									name = line[:-100] + linspl[0] + '_' + linspl[1] + '_' + linspl[3]
 									print(name)
-									replaceAll(phasefile, line, name)
+									replaceAll(file, line, name)
 
 		#Rewrite polyploid names as >WA01_polyploid_diploidhit
 		for folder in os.listdir(phaseset):
 			if 'fastq' in folder:
+				print('Preparing Diploid UBLAST Hit Annotation alignments')
 				os.chdir(phaseset+folder+'/diploidclusters/')
 				sample=folder.split('_')[0] +'_' + folder.split('_')[1]
 				for file in os.listdir(phaseset+folder+'/diploidclusters/'):
@@ -666,7 +667,7 @@ else:
 									print(linspl)
 									name = line[:-100] + linspl[0] + '_' + linspl[1] + '_' + linspl[2] + '\n' 
 									print(name)
-									replaceAll(phasefile, line, name)
+									replaceAll(file, line, name)
 
 
 
