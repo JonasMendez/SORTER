@@ -10,6 +10,7 @@ Contact:jonasmrgrad@gmail.com
 Dependencies:
 #############
 Biopython (Python 2.7.x)
+Perl
 Trim Galore v 0.6.4 (with cutadapt v1.1B)
 bwa v 0.7.17-r1188
 SAMTools v 1.9 (using htslib 1.9)
