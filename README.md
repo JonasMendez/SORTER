@@ -65,7 +65,7 @@ the latter annotates allopolyploids/hybrids with the top diploid blast hit and t
 The diploid hit annotation can be run as is to see where concatenated sets result in a phylogeny relative to diploids. Closely related sets can then
 be collapsed into one haplotype if they result as all being associated with the same diploid species, likewise other groupings associated with
 other diploid species should be collapsed. Concatenated sets with unclear placing should be removed from analysis.
-Once you have identified and re-concatenated the final sets based on the preliminary phylogeny, another phylogenetic analyses with the final collapsed haplotypes can be performed.
+Once you have identified and re-concatenated the final sets based on the preliminary phylogeny, another phylogenetic analyses can be performed with the final concatenated homeolog/hybrid haplotypes.
 The current version of this script will output an entire set of locus-cluster alignments + the phased/annotated sequences of ONE allopolyploid/hybrid,
 future version will incorporate adding sequences for multiple allopolyploids into the same alignment.
 The script will accomodate multiple samples at once, but because we are re-aligning the entire Phase1 locus-cluster dataset for EVERY allopolyploid/hybrid sample,
