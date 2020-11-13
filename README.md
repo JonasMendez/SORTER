@@ -44,16 +44,16 @@ General Definition of Phases and Output:
 ########################################
 
 Phase1.py
-This script will generate clustered locus copies at a user set threshold (.60-.65 recommended) for all of your samples and output them as alignments (per locus-cluster).
-The clustering is done to separate out potential paralogs because Target-Enrichment data will often amplify them in non-model systems.
+This script will generate clustered consensus alleles at a user set clustering threshold (.60-.65 recommended) for all of your samples and output them as alignments (per locus-cluster).
+The clustering is done to separate out potential paralogs because Target-Enrichment will often amplify them in non-model systems.
 If you are interested in using this pipeline to look at possible parentage in known allopolyploids/hybrids, or identify cryptic hybrids/allopolyploids
-in your current dataset, use scripts Phase2.py and Phase3.py
+in your current dataset, use scripts Phase2.py and Phase3.py after determining an appropriate clustering threshold with Phase1.py -reclust option.
 
 Phase2.py
 This script will take the locus-cluster dataset from Phase1.py and phase every single sample to output a phased alignment.
 This phased dataset can be used to identify potential hybrid/allopolyploid species. Phased sequences for each sample should 
 be sister to each other with relatively strong support in a phylogeny, if the samples are behaving as diploids. 
-If you observe phased samples that don't result as sister, and are associated with poor node support values they likely indicate
+If you observe phased samples that don't result as sister and are associated with poor node support values they likely indicate
 allopolyploid/hybrid species. These samples should be removed from the dataset so that you can rerun Phase1.py without them and then
 phase the hybrid/allopolyploid sample(s) using Phase3.py
 
@@ -62,9 +62,10 @@ This script will phase and assign orthology to samples suspected to be allopolyp
 for diploids from Phase1.py as the reference to determine which locus-cluster the phased sequences belong to, and also to assign preliminary
 species parentage to each phased sequence based on sequence similarity. The script outputs two main alignment files with extensions _phase.fasta and _diploidhit.fasta
 the latter annotates allopolyploids/hybrids with the top diploid blast hit and the former randomly assigns _ph0 or _ph1 annotation to phased sequences.
-The diploid hit annotation can be run as is to see where separate concatenated groupings result in a phylogeny. Closely related groups can then
+The diploid hit annotation can be run as is to see where concatenated sets result in a phylogeny relative to diploids. Closely related sets can then
 be collapsed into one haplotype if they result as all being associated with the same diploid species, likewise other groupings associated with
-other diploid species should be collapsed. You can then run another phylogenetic analyses with the final collapsed haplotypes.
+other diploid species should be collapsed. Concatenated sets with unclear placing should be removed from analysis.
+Once you have identified and re-concatenated the final sets based on the preliminary phylogeny, another phylogenetic analyses with the final collapsed haplotypes can be performed.
 The current version of this script will output an entire set of locus-cluster alignments + the phased/annotated sequences of ONE allopolyploid/hybrid,
 future version will incorporate adding sequences for multiple allopolyploids into the same alignment.
 The script will accomodate multiple samples at once, but because we are re-aligning the entire Phase1 locus-cluster dataset for EVERY allopolyploid/hybrid sample,
@@ -144,7 +145,7 @@ Each set of trimmed .fq files is in their own folder corresponding to each sampl
 folders have ..._R1.fastq extensions as unique identifiers for the script.
 
 COMMAND LINE EXAMPLE:
-python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -c1 .85 -c2 .60 -spades T -trimgalore T -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -c1 .90 -c2 .65 -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
 
 #########
 Phase2.py
