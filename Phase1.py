@@ -121,7 +121,7 @@ baitid1= ["L%d_" % x for x in range(455)]
 baitid= ["L%d" % x for x in range(455)]
 direc=os.listdir(args.workingdir)
 contigdir=args.workingdir + 'diploids/'
-map_contigs_to_baits_dir=sorted(os.listdir(contigdir))
+
 
 #Define function to change sequence IDs
 def replaceAll(file,searchExp,replaceExp):
@@ -413,7 +413,7 @@ else:
 	os.chdir(contigdir)
 
 	#Make summary files of Consensus Alleles per Sample
-
+	map_contigs_to_baits_dir=sorted(os.listdir(contigdir))
 	for folder in map_contigs_to_baits_dir:
 		print(folder)
 
