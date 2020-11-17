@@ -119,7 +119,7 @@ FLAGS:
 -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .65 Recommended, depends on taxonomic breadth of ingroup/outgroups; general guideline would be to set a higher id for 1-4 closely related outgroups, or lower for 4+ outgroups of varying genetic distance.) 
 -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
--onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
+-op (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
 -reclust (T/F) IF T ONLY RERUNs LOCUS CLUSTERING + ALIGNMENT. CLEARS PREVIOUS LOCUS-CLUSTER OUTPUT, BACK UP IF NEEDED TO COMPARE CLUSTERING THRESHOLDS.
 	RUNNING -reclust T IGNORES -c1 -cs -csl -csn VALUES, USING VALUES FROM PREVIOUS RUN; TO CHANGE THESE FLAGS YOU MUST RERUN Phase1.py WITH -reclust F  spades F -trimgalore F -op F
 -cs TAKE SPADES CONTIGS or SCAFFOLDS? (input as: scaffold or contig)
@@ -145,7 +145,7 @@ Each set of trimmed .fq files is in their own folder corresponding to each sampl
 folders have ..._R1.fastq extensions as unique identifiers for the script.
 
 COMMAND LINE EXAMPLE:
-python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -c1 .90 -c2 .65 -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+python Phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -c1 .90 -c2 .65 -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
 
 #########
 Phase2.py
@@ -158,7 +158,7 @@ FLAGS:
 
 -wd WORKING DIRECTORY (DIRECTORY STRING STARTING AND ENDING IN '/'. e.g: "-wd /workingdirectory/" should be the same directory used in Phase 1) 
 -pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
--psl MINIMUM LENGTH OF PHASED SEQUENCES (recommended 350)
+-psl MINIMUM LENGTH OF PHASED SEQUENCES (350 recommended)
 -n PROPORTION OF MISSING DATA (N) ALLOWED IN PHASED SEQUENCES? (atleast 50% bp representation recommended, input as -n 50 , NOT AS DECIMAL)
 -al NUMBER OF ITERATIONS FOR MAFFT ALIGNMENTS (1000 recommended)
 -indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
@@ -201,7 +201,7 @@ FLAGS
 -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .90 Recommended) 
 -trimgalore RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
--onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
+-onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trimgalore and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
 -cs TAKE SPADES CONTIGS or SCAFFOLDS? (MUST INPUT AS: scaffold or contig)
 -csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES. DEPENDING ON SUSPECTED PLOIDY, MULTIPLY BY 2 TO ACCOUNT FOR HETEROZYGOUS VARIANTS (i.e. tetraploid 4*2=8, triploid 3*2=6. 8-10 for unknown samples is recommended)
 -csl ONLY TAKE CONTIGS/SCAFFOLDS LARGER THAN N LENGTH
@@ -227,4 +227,4 @@ Output Files:
 the *_trimmed.fasta files are annotated as @@##_sampleid_diploidhit_phase(0/1)
 
 COMMAND LINE EXAMPLE:
-python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta  -spades T -trimgalore T -op F -c1 .85 -cs contig -csn 6 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
+python Phase3.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta  -spades T -trimgalore T -op F -c1 .90 -cs contig -csn 8 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
