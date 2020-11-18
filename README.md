@@ -52,7 +52,7 @@ in your current dataset, use scripts Phase2.py and Phase3.py after determining a
 Phase2.py
 This script will take the locus-cluster dataset from Phase1.py and phase every single sample to output a phased alignment.
 This phased dataset can be used to identify potential hybrid/allopolyploid species. Phased sequences for each sample should 
-be sister to each other with relatively strong support in a phylogeny, if the samples are behaving as diploids. 
+be sister to each other with relatively strong support in a phylogeny, or multiple samples of the same species should at the very least be monophyletic, if the samples are behaving as diploids would. 
 If you observe phased samples that don't result as sister and are associated with poor node support values they likely indicate
 allopolyploid/hybrid species. These samples should be removed from the dataset so that you can rerun Phase1.py without them and then
 phase the hybrid/allopolyploid sample(s) using Phase3.py
