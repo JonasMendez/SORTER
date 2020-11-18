@@ -65,6 +65,7 @@ import glob
 
 # -wd WORKING DIRECTORY 
 # -ref PROBE REFERENCE DIRECTORY (FASTA FILE)
+# -loci NUMBER OF REFERENCE LOCI
 # -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .97 Recommended) 
 # -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .65 Recommended, depends on taxonomic breadth of ingroup/outgroups; general guideline would be to set a higher id for 1-4 closely related outgroups, or lower for 4+ outgroups of varying genetic distance.) 
 # -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
@@ -96,7 +97,7 @@ import glob
 # folders have ..._R1.fastq extensions as unique identifiers for the script.
 
 # TYPICAL COMMAND LINE
-# python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -c1 .85 -c2 .60 -spades T -trimgalore T -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+# python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -loci 450 -c1 .85 -c2 .60 -spades T -trimgalore T -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
 parser = argparse.ArgumentParser()
 parser.add_argument("-wd", "--workingdir")
 parser.add_argument("-c1", "--clust1id")
@@ -105,6 +106,7 @@ parser.add_argument("-spades", "--spadesassembly")
 parser.add_argument("-trimgalore", "--trimgalore")
 parser.add_argument("-op", "--onlyprocess")
 parser.add_argument("-reclust", "--recluster")
+parser.add_argument("-loci", "--locinum")
 parser.add_argument("-cs", "--contigscaf")
 parser.add_argument("-csn", "--contigscafnum")
 parser.add_argument("-csl", "--contigscaflen")
@@ -117,11 +119,10 @@ diploidclusters=args.workingdir + 'diploidclusters/'
 longestcontig=args.workingdir + 'getlongestcontig.py'
 dintdir=args.workingdir + 'deinterleave.py'
 seqclean=args.workingdir + 'seqclean.py'
-baitid1= ["L%d_" % x for x in range(455)]
-baitid= ["L%d" % x for x in range(455)]
+baitid1= ["L%d_" % x for x in range(args.locinum)]
+baitid= ["L%d" % x for x in range(args.locinum)]
 direc=os.listdir(args.workingdir)
 contigdir=args.workingdir + 'diploids/'
-
 
 #Define function to change sequence IDs
 def replaceAll(file,searchExp,replaceExp):
@@ -189,6 +190,17 @@ if args.recluster is 'F':
 				sys.exit("--onlyprocess = T, exiting script")
 			else:
 
+				print('Preparing Directories...')
+				for folder in os.listdir(args.workingdir):
+					if folder.endswith(".fastq"):
+						os.chdir(args.workingdir + folder)
+						dirpath =  args.workingdir + folder + "/"
+						iterpath = os.listdir(dirpath)
+						for file in iterpath:
+							if not 'spades_hybrid_assembly' in file:
+								if not '_val_' in file:
+									os.remove(dirpath + file)										
+
 	# #map contigs to consensus baits, move contigs as scaffoldmap.fa or contigmap.fa to root sample directory (WA01_species)
 
 				for folder in direc:
@@ -207,9 +219,9 @@ if args.recluster is 'F':
 										print(file)
 										conscontig= args.refdir
 										subprocess.call(["bwa mem -V %s %s > %s_%smap.sam" % (conscontig, contig, folder, args.contigscaf)], shell=True)
-										subprocess.call(["samtools view -S -F 4 *_%smap.sam | awk -v OFS='\t' '{print \"> \" $3 \"\\n \" $10}' > %smap.fa " % (args.contigscaf, folder + args.contigscaf)], shell=True)
+										subprocess.call(["samtools view -S -F 4 *_%smap.sam | awk -v OFS='\t' '{print \"> \" $3 \"\\n \" $10}' > %smap.fa " % (args.contigscaf, folder + '_' + args.contigscaf)], shell=True)
 										src = folder + '_' + args.contigscaf + 'map.fa'
-										dst = dirpath + '/' + folder + '_' + args.contigscaf + 'map.fa'
+										dst = dirpath + folder + '_' + args.contigscaf + 'map.fa'
 										os.rename(src, dst)
 										os.remove(folder + '_' + args.contigscaf + 'map.sam')
 				os.chdir(args.workingdir)
@@ -414,6 +426,7 @@ else:
 
 	#Make summary files of Consensus Alleles per Sample
 	map_contigs_to_baits_dir=sorted(os.listdir(contigdir))
+
 	for folder in map_contigs_to_baits_dir:
 		print(folder)
 
