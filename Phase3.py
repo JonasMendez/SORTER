@@ -46,6 +46,7 @@ import glob
 
 #-wd WORKING DIRECTORY 
 #-ref PROBE REFERENCE DIRECTORY (FASTA FILE) SAME AS PHASE1
+#-loci NUMBER OF REFERENCE LOCI SAME AS PHASE1
 #-c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .90 Recommended for allopolyploids/hybrids) 
 #-trimgalore RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 #-spades RUN SPADES ASSEMBLY? (T/F)***
@@ -85,6 +86,7 @@ parser.add_argument("-c1", "--clust1id")
 parser.add_argument("-spades", "--spadesassembly")
 parser.add_argument("-trimgalore", "--trimgalore")
 parser.add_argument("-op", "--onlyprocess")
+parser.add_argument("-loci", "--locinum")
 parser.add_argument("-cs", "--contigscaf")
 parser.add_argument("-csn", "--contigscafnum")
 parser.add_argument("-csl", "--contigscaflen")
@@ -99,8 +101,8 @@ longestcontig=args.workingdir + 'getlongestcontig.py'
 dintdir=args.workingdir + 'deinterleave.py'
 seqclean=args.workingdir + 'seqclean.py'
 annotatedupes = args.workingdir+'annotatedupes'
-baitid1= ["L%d_" % x for x in range(455)]
-baitid= ["L%d" % x for x in range(455)]
+baitid1= ["L%d_" % x for x in range(args.locinum)]
+baitid= ["L%d" % x for x in range(args.locinum)]
 diploidclusters=args.workingdir + 'diploidclusters/'
 keeplongest=args.workingdir + 'keeplongest.py'
 
