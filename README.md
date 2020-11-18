@@ -115,6 +115,7 @@ FLAGS:
 
 -wd WORKING DIRECTORY 
 -ref PROBE REFERENCE DIRECTORY (FASTA FILE)
+-loci NUMBER OF REFERENCE LOCI
 -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .97 Recommended) 
 -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .65 Recommended, depends on taxonomic breadth of ingroup/outgroups; general guideline would be to set a higher id for 1-4 closely related outgroups, or lower for 4+ outgroups of varying genetic distance.) 
 -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
@@ -145,7 +146,7 @@ Each set of trimmed .fq files is in their own folder corresponding to each sampl
 folders have ..._R1.fastq extensions as unique identifiers for the script.
 
 COMMAND LINE EXAMPLE:
-python Phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -c1 .90 -c2 .65 -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+python Phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -loci 450 -op F -spades T -trimgalore T -op F -reclust F -c1 .90 -c2 .65 -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
 
 #########
 Phase2.py
@@ -198,6 +199,7 @@ FLAGS
 
 -wd WORKING DIRECTORY 
 -ref PROBE REFERENCE DIRECTORY (FASTA FILE) SAME AS Phase1.py
+-loci NUMBER OF REFERENCE LOCI SAME AS Phase1.py
 -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .90 Recommended) 
 -trimgalore RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
@@ -227,4 +229,4 @@ Output Files:
 the *_trimmed.fasta files are annotated as @@##_sampleid_diploidhit_phase(0/1)
 
 COMMAND LINE EXAMPLE:
-python Phase3.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta  -spades T -trimgalore T -op F -c1 .90 -cs contig -csn 8 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
+python Phase3.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -loci 450 -spades T -trimgalore T -op F -c1 .90 -cs contig -csn 8 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
