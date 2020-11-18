@@ -78,7 +78,7 @@ import glob
 
 
 #TYPICAL COMMAND LINE
-#python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta  -spades T -trimgalore T -op F -c1 .85 -cs contig -csn 6 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
+#python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -loci 450 -spades T -trimgalore T -op F -c1 .85 -cs contig -csn 6 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-wd", "--workingdir")
