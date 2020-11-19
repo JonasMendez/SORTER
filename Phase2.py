@@ -62,8 +62,6 @@ contigdir=args.workingdir + 'diploids/'
 longestcontig =args.workingdir + 'getlongestcontig.py'
 phasedir = args.workingdir + 'diploids_phased/' #Make sure this directory has been made
 dintdir=args.workingdir + 'deinterleave.py'
-baitid1= ["L%d_" % x for x in range(455)]
-baitid= ["L%d" % x for x in range(455)]
 direc=os.listdir(args.workingdir)
 map_contigs_to_baits_dir=sorted(os.listdir(contigdir))
 
