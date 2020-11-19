@@ -101,8 +101,8 @@ longestcontig=args.workingdir + 'getlongestcontig.py'
 dintdir=args.workingdir + 'deinterleave.py'
 seqclean=args.workingdir + 'seqclean.py'
 annotatedupes = args.workingdir+'annotatedupes'
-baitid1= ["L%d_" % x for x in range(args.locinum)]
-baitid= ["L%d" % x for x in range(args.locinum)]
+baitid1= ["L%d_" % x for x in range(int(args.locinum))]
+baitid= ["L%d" % x for x in range(int(args.locinum))]
 diploidclusters=args.workingdir + 'diploidclusters/'
 keeplongest=args.workingdir + 'keeplongest.py'
 
