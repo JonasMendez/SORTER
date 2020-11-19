@@ -119,8 +119,8 @@ diploidclusters=args.workingdir + 'diploidclusters/'
 longestcontig=args.workingdir + 'getlongestcontig.py'
 dintdir=args.workingdir + 'deinterleave.py'
 seqclean=args.workingdir + 'seqclean.py'
-baitid1= ["L%d_" % x for x in range(args.locinum)]
-baitid= ["L%d" % x for x in range(args.locinum)]
+baitid1= ["L%d_" % x for x in range(int(args.locinum))]
+baitid= ["L%d" % x for x in range(int(args.locinum))]
 direc=os.listdir(args.workingdir)
 contigdir=args.workingdir + 'diploids/'
 
