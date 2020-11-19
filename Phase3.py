@@ -184,7 +184,7 @@ else:
 								if contig.endswith(args.contigscaf + "s.fasta"):
 									conscontig= args.refdir
 									subprocess.call(["bwa mem -V %s %s > %s_%smap.sam" % (conscontig, contig, folder, args.contigscaf)], shell=True)
-									subprocess.call(["samtools view -S -F 4 *_%smap.sam | awk -v OFS='\t' '{print \"> \" $3 \"\\n \" $10}' > %smap.fa " % (args.contigscaf, folder + args.contigscaf)], shell=True)
+									subprocess.call(["samtools view -S -F 4 *_%smap.sam | awk -v OFS='\t' '{print \"> \" $3 \"\\n \" $10}' > %smap.fa " % (args.contigscaf, folder + '_' + args.contigscaf)], shell=True)
 									src = folder + args.contigscaf + 'map.fa'
 									dst = dirpath + folder + '_' + args.contigscaf + 'map.fa'
 									os.rename(src, dst)
