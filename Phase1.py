@@ -75,7 +75,7 @@ import glob
 # 	RUNNING THIS STEP IGNORES -c1, -cs -csl, -csn VALUES, USING VALUES FROM PREVIOUS RUN; TO CHANGE THESE FLAGS YOU MUST RERUN Phase1.py WITH -reclust F  spades F -trimgalore F -op F
 # -cs TAKE SPADES CONTIGS or SCAFFOLDS? (input as: scaffold or contig)
 # -csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES
-# -csl ONLY TAKE CONTIGS LARGER THAN N LENGTH
+# -csl ONLY TAKE CONTIGS LARGER THAN N LENGTH, UNLESS ALL CONTIGS/SCAFFOLDS FOR A SCAFFOLD ARE LESS THAN USER DEFINED LENGTH, THIS IS DONE TO IMPROVE COVERAGE FOR FULL TAXON REPRESENTATION DATASETS
 # -al number of iterations for MAFFT alignments (1000 recommended)
 # -indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
 # -idformat (full/copies/onlysample/*) OUTPUTS FINAL ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
@@ -277,7 +277,7 @@ if args.recluster is 'F':
 				   								replaceAll(file, line, name)		
 				os.chdir(args.workingdir)
 
-				print('Take ' + args.contigscafnum + ' longest scaffolds for each locus per sample, then removing any scaffolds smaller than ' + args.contigscaflen + ' bp')
+				print('Take ' + args.contigscafnum + ' longest '+ args.contigscaf +'s for each locus per sample, then removing any '+ args.contigscaf +'s smaller than ' + args.contigscaflen + ' bp')
 
 				#Take longest contig from contig set
 				for folder in direc:
@@ -292,6 +292,23 @@ if args.recluster is 'F':
 								subprocess.call(["seqtk seq -L %s %slongest.fa > %slongestfiltered.fa" % (args.contigscaflen, file, file)], shell=True )
 
 				os.chdir(args.workingdir)
+
+				print('Retrieve '+args.contigscaf+' that were less than '+ args.contigscaflen+', if those were the longest '+args.contigscaf+'s for the locus')
+				#Retrieve contigs that were less than the user defined limit, if those were the longest contigs. This is done to improve coverage needed for analyses (i.e. MSC via STACEY or *BEAST) requiring full sample representation 
+				for folder in direc:
+					if 'fastq' in folder:
+						os.chdir(args.workingdir + folder)
+						readir = os.listdir(args.workingdir + folder)
+						for file in readir:
+							if file.endswith('longestfiltered.fa'):
+								if os.path.getsize(file) == 0:
+									os.remove(file)
+									src =args.workingdir + folder + '/' + file[:-18] + 'longest.fa'
+									#print(src)
+									dst =args.workingdir + folder + '/' + file
+									#print(dst)
+									os.rename(src, dst)
+									#print(file)
 
 				print('Clustering ' + args.contigscaf +'s ' + 'into Consensus Alleles at' + args.clust1id + ' Identity Threshold')
 				#cluster contigs
@@ -371,6 +388,7 @@ if args.recluster is 'F':
 					else:
 						continue
 						break
+				print('Contigs compiled, re-run Phase1.py with -reclust T to continue pipeline and generate locus clusters')
 else:
 
 	os.chdir(args.workingdir)
@@ -482,7 +500,7 @@ else:
 	columns =  [x for x in map_contigs_to_baits_dir if x.endswith('_')]
 	header = ['bait']+columns
 	#print header
-	with open('ALLsamples_consensusallele_SUMMARY_TABLE.csv', 'wb') as outfile:
+	with open('ALLsamples_consensusallele_c1'+args.clust1id+'_'+args.contigscaf+'_csl'+args.contigscaflen+'_csn'+args.contigscafnum+'_'+'SUMMARY_TABLE.csv', 'wb') as outfile:
 		writer = csv.writer(outfile)
 		writer.writerow(header)
 		samples = sorted(DICT.values()[0].keys())
