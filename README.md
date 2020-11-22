@@ -5,7 +5,8 @@ Sorter of Orthologous Regions for Target Enrichment Data
 Jonas Mendez-Reneau1, Erin Sigel1
 University of Louisiana Lafayette
 
-#CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
+CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
+
 cite as:
 Mendez-Reneau JI, Sigel EM (2020) University of Louisiana, Lafayette DOI: 10.5281/zenodo.4265500
 
