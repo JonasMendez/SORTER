@@ -161,8 +161,6 @@ FLAGS:
 
 -wd WORKING DIRECTORY (DIRECTORY STRING STARTING AND ENDING IN '/'. e.g: "-wd /workingdirectory/" should be the same directory used in Phase 1) 
 -pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
--psl MINIMUM LENGTH OF PHASED SEQUENCES (350 recommended)
--n PROPORTION OF MISSING DATA (N) ALLOWED IN PHASED SEQUENCES? (atleast 50% bp representation recommended, input as -n 50 , NOT AS DECIMAL)
 -al NUMBER OF ITERATIONS FOR MAFFT ALIGNMENTS (1000 recommended)
 -indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL FASTA ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
