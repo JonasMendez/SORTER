@@ -173,7 +173,7 @@ FLAGS:
 	Use this setting if you wish to skip phasing your diploid locus-cluster samples but still want to process polyploids/hyrbids with Phase3.py
 
 COMMAND LINE EXAMPLE
-python Phase2.py -wd /working/directory/ -pq 20 -psl 350 -n 50 -al 1000 -indel .25 -idformat phase -cdbonly F
+python Phase2.py -wd /working/directory/ -pq 20 -al 1000 -indel .25 -idformat phase -cdbonly F
 
 #########
 Phase3.py
