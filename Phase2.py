@@ -24,6 +24,10 @@ import glob
 # Jonas Mendez-Reneau1, Erin Sigel1
 # University of Louisiana Lafayette
 
+#CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
+
+#cite as: Mendez-Reneau JI, Sigel EM (2020) University of Louisiana, Lafayette DOI: 10.5281/zenodo.4265500
+
 # Contact:jonasmrgrad@gmail.com
 
 # PHASE 2 OF THE SORTED PIPELINE TAKES THE LOCUS-CLUSTER DATASET GENERATED IN PHASE 1 AND PHASES CONSENSUS ALLELES BY REMAPPING TRIMMED READS TO SAMPLE-SPECIFIC LOCUS-CLUSTERS
