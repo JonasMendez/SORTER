@@ -24,10 +24,6 @@ import glob
 # Jonas Mendez-Reneau1, Erin Sigel1
 # University of Louisiana Lafayette
 
-#CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
-
-#cite as: Mendez-Reneau JI, Sigel EM (2020) University of Louisiana, Lafayette DOI: 10.5281/zenodo.4265500
-
 # Contact:jonasmrgrad@gmail.com
 
 # PHASE 2 OF THE SORTED PIPELINE TAKES THE LOCUS-CLUSTER DATASET GENERATED IN PHASE 1 AND PHASES CONSENSUS ALLELES BY REMAPPING TRIMMED READS TO SAMPLE-SPECIFIC LOCUS-CLUSTERS
@@ -77,146 +73,146 @@ print('SORTED Phase 2 will run with the following settings:' + '\n' + 'Working D
 
 
 #Degap locus-clusters
-# os.chdir(diploidclusters)
-# print('degapping locus-clusters for phasing')
-# for file in os.listdir(diploidclusters):
-# 	if file.endswith('_'):
-# 		newfilename=file+ 'degap.fasta'
-# 		print('degapping ' + file)
-# 		with open(newfilename, "w") as o:
-# 			for record in SeqIO.parse(file, "fasta"):
-#         			record.seq = record.seq.ungap("-")
-#         			SeqIO.write(record, o, "fasta")
+os.chdir(diploidclusters)
+print('degapping locus-clusters for phasing')
+for file in os.listdir(diploidclusters):
+	if file.endswith('_'):
+		newfilename=file+ 'degap.fasta'
+		print('degapping ' + file)
+		with open(newfilename, "w") as o:
+			for record in SeqIO.parse(file, "fasta"):
+        			record.seq = record.seq.ungap("-")
+        			SeqIO.write(record, o, "fasta")
 
-# os.chdir(diploidclusters)
+os.chdir(diploidclusters)
 
-# #deinterlieave locus-clusters
-# print('deinterleaving locus-clusters for phasing')
-# for file in os.listdir(diploidclusters):
-# 	if file.endswith('degap.fasta'):
-# 		print("deinterleaving " + file)
-# 		subprocess.call(["python %s %s" % (dintdir, file)], shell=True)
-# 		os.remove(file)
+#deinterlieave locus-clusters
+print('deinterleaving locus-clusters for phasing')
+for file in os.listdir(diploidclusters):
+	if file.endswith('degap.fasta'):
+		print("deinterleaving " + file)
+		subprocess.call(["python %s %s" % (dintdir, file)], shell=True)
+		os.remove(file)
 
-# os.chdir(diploidclusters)
+os.chdir(diploidclusters)
 
-# #add new line in cluster files
-# for file in os.listdir(diploidclusters):
-# 	if 'deinterleaved' in file:
-# 		with open(file, 'a+') as cluster:
-# 			cluster.write('\n')
+#add new line in cluster files
+for file in os.listdir(diploidclusters):
+	if 'deinterleaved' in file:
+		with open(file, 'a+') as cluster:
+			cluster.write('\n')
 
 if args.clustdb is 'T':
 	sys.exit('-cdbonly = T ; Locus-Clusters ready for use in Phase3.py blast database. Exiting.')		
 else:	
 
-# 	# # ##Recompile sample specific clusterbaits into fastq folders for readmapping
-# 	for file in os.listdir(diploidclusters):
-# 		if 'deinterleaved' in file:
-# 			with open(file, 'r') as allsamplefile:
-# 				for line in allsamplefile:
-# 					if '>' in line:
-# 						linspl=line.split('_')
-# 						sample=linspl[2] + '_' + linspl[3] + '_allcontigs_allclusterbaits_annotated.fasta'
-# 						print(linspl)
-# 						with open(os.path.join(args.workingdir + linspl[2] + '_' + linspl[3] + '_R1.fastq/', sample), 'a+') as idx:
-# 							if not line.endswith('\n'):
-# 								idx.write('\n')
-# 							else:
-# 								while True:
-# 									try:
-# 										idx.write(line)
-# 										seq = next(allsamplefile)
-# 										idx.write(seq)
-# 										print(line)
-# 										print seq
-# 										break
-# 									except StopIteration as e:
-# 										print(e)
-# 										break
+	# # ##Recompile sample specific clusterbaits into fastq folders for readmapping
+	for file in os.listdir(diploidclusters):
+		if 'deinterleaved' in file:
+			with open(file, 'r') as allsamplefile:
+				for line in allsamplefile:
+					if '>' in line:
+						linspl=line.split('_')
+						sample=linspl[2] + '_' + linspl[3] + '_allcontigs_allclusterbaits_annotated.fasta'
+						print(linspl)
+						with open(os.path.join(args.workingdir + linspl[2] + '_' + linspl[3] + '_R1.fastq/', sample), 'a+') as idx:
+							if not line.endswith('\n'):
+								idx.write('\n')
+							else:
+								while True:
+									try:
+										idx.write(line)
+										seq = next(allsamplefile)
+										idx.write(seq)
+										print(line)
+										print seq
+										break
+									except StopIteration as e:
+										print(e)
+										break
 
-# 	os.chdir(args.workingdir)
+	os.chdir(args.workingdir)
 
-# 	#Map reads to consensus contig references
-# 	for folder in direc:
-# 		if 'R1' in folder:
-# 			os.chdir(args.workingdir + folder)
-# 			for baits in os.listdir(args.workingdir + folder):
-# 				if baits.endswith('allcontigs_allclusterbaits_annotated.fasta'):
-# 					read = folder[:-8] + 'R1_val_1.fq'
-# 					print(read)
-# 					R2 = folder[:-8] + 'R2_val_2.fq'
-# 					print(R2)
-# 					print(baits)
-# 					subprocess.call(["bwa index %s" % (baits)], shell=True)
-# 					subprocess.call(["bwa mem -V %s %s %s > %smapreads.sam" % (baits, read, R2, folder[:-8])], shell=True)
-# 					subprocess.call(["samtools sort  %smapreads.sam -o %s" % (folder[:-8], folder[:-8] + 'mapreads.bam')], shell=True)
-# 					subprocess.call(["samtools index  %s" % (folder[:-8] + 'mapreads.bam')], shell=True)
-# 					subprocess.call(["samtools phase -A -Q %s -b %s %s" % (args.phasequal, folder[:-8], folder[:-8] + 'mapreads.bam')], shell=True)
-# 					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.0.bam', folder[:-8] + '.0srt.bam')], shell=True)
-# 					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.1.bam', folder[:-8] + '.1srt.bam')], shell=True)
-# 					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.chimera.bam', folder[:-8] + '.chimerasrt.bam')], shell=True)
-# 					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.0srt.bam', folder[:-8] + '_0.vcf' )], shell=True)
-# 					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.1srt.bam', folder[:-8] + '_1.vcf' )], shell=True)
-# 					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.chimerasrt.bam', folder[:-8] + '_chimera.vcf' )], shell=True)
-# 					subprocess.call(["tabix %s" % (folder[:-8] + '_0.vcf')], shell=True)
-# 					subprocess.call(["tabix %s" % (folder[:-8] + '_1.vcf')], shell=True)
-# 					subprocess.call(["tabix %s" % (folder[:-8] + '_chimera.vcf')], shell=True)
-# 					subprocess.call(["vcfutils.pl vcf2fq %s > %s_0.fastq" % (folder[:-8] + '_0.vcf', folder[:-8])], shell=True)
-# 					subprocess.call(["vcfutils.pl vcf2fq %s > %s_1.fastq" % (folder[:-8] + '_1.vcf', folder[:-8])], shell=True)
-# 					subprocess.call(["vcfutils.pl vcf2fq %s > %s_chimera.fastq" % (folder[:-8] + '_chimera.vcf', folder[:-8])], shell=True)
-# 					subprocess.call(["seqtk seq -A %s > %s_0_Final.fasta" % (folder[:-8] + '_0.fastq', folder[:-8])], shell=True)
-# 					subprocess.call(["seqtk seq -A %s > %s_1_Final.fasta" % (folder[:-8] + '_1.fastq', folder[:-8])], shell=True)
-# 					subprocess.call(["seqtk seq -A %s > %s_chimera.fasta" % (folder[:-8] + '_chimera.fastq', folder[:-8])], shell=True)
-# 					os.remove(folder[:-8] + 'mapreads.bam')
-# 					os.remove(folder[:-8] + 'mapreads.sam')
-# 					os.remove(folder[:-8] + '.0.bam')
-# 					os.remove(folder[:-8] + '.0srt.bam')
-# 					os.remove(folder[:-8] + '_0.vcf')
-# 					os.remove(folder[:-8] + '_0.fastq')
-# 					os.remove(folder[:-8] + '.1.bam')
-# 					os.remove(folder[:-8] + '.1srt.bam')
-# 					os.remove(folder[:-8] + '_1.vcf')
-# 					os.remove(folder[:-8] + '_1.fastq')
-# 					os.remove(folder[:-8] + '.chimera.bam')
-# 					os.remove(folder[:-8] + '.chimerasrt.bam')
-# 					os.remove(folder[:-8] + '_chimera.vcf')
-# 					os.remove(folder[:-8] + '_chimera.fastq')
+	#Map reads to consensus contig references
+	for folder in direc:
+		if 'R1' in folder:
+			os.chdir(args.workingdir + folder)
+			for baits in os.listdir(args.workingdir + folder):
+				if baits.endswith('allcontigs_allclusterbaits_annotated.fasta'):
+					read = folder[:-8] + 'R1_val_1.fq'
+					print(read)
+					R2 = folder[:-8] + 'R2_val_2.fq'
+					print(R2)
+					print(baits)
+					subprocess.call(["bwa index %s" % (baits)], shell=True)
+					subprocess.call(["bwa mem -V %s %s %s > %smapreads.sam" % (baits, read, R2, folder[:-8])], shell=True)
+					subprocess.call(["samtools sort  %smapreads.sam -o %s" % (folder[:-8], folder[:-8] + 'mapreads.bam')], shell=True)
+					subprocess.call(["samtools index  %s" % (folder[:-8] + 'mapreads.bam')], shell=True)
+					subprocess.call(["samtools phase -A -Q %s -b %s %s" % (args.phasequal, folder[:-8], folder[:-8] + 'mapreads.bam')], shell=True)
+					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.0.bam', folder[:-8] + '.0srt.bam')], shell=True)
+					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.1.bam', folder[:-8] + '.1srt.bam')], shell=True)
+					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.chimera.bam', folder[:-8] + '.chimerasrt.bam')], shell=True)
+					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.0srt.bam', folder[:-8] + '_0.vcf' )], shell=True)
+					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.1srt.bam', folder[:-8] + '_1.vcf' )], shell=True)
+					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.chimerasrt.bam', folder[:-8] + '_chimera.vcf' )], shell=True)
+					subprocess.call(["tabix %s" % (folder[:-8] + '_0.vcf')], shell=True)
+					subprocess.call(["tabix %s" % (folder[:-8] + '_1.vcf')], shell=True)
+					subprocess.call(["tabix %s" % (folder[:-8] + '_chimera.vcf')], shell=True)
+					subprocess.call(["vcfutils.pl vcf2fq %s > %s_0.fastq" % (folder[:-8] + '_0.vcf', folder[:-8])], shell=True)
+					subprocess.call(["vcfutils.pl vcf2fq %s > %s_1.fastq" % (folder[:-8] + '_1.vcf', folder[:-8])], shell=True)
+					subprocess.call(["vcfutils.pl vcf2fq %s > %s_chimera.fastq" % (folder[:-8] + '_chimera.vcf', folder[:-8])], shell=True)
+					subprocess.call(["seqtk seq -A %s > %s_0_Final.fasta" % (folder[:-8] + '_0.fastq', folder[:-8])], shell=True)
+					subprocess.call(["seqtk seq -A %s > %s_1_Final.fasta" % (folder[:-8] + '_1.fastq', folder[:-8])], shell=True)
+					subprocess.call(["seqtk seq -A %s > %s_chimera.fasta" % (folder[:-8] + '_chimera.fastq', folder[:-8])], shell=True)
+					os.remove(folder[:-8] + 'mapreads.bam')
+					os.remove(folder[:-8] + 'mapreads.sam')
+					os.remove(folder[:-8] + '.0.bam')
+					os.remove(folder[:-8] + '.0srt.bam')
+					os.remove(folder[:-8] + '_0.vcf')
+					os.remove(folder[:-8] + '_0.fastq')
+					os.remove(folder[:-8] + '.1.bam')
+					os.remove(folder[:-8] + '.1srt.bam')
+					os.remove(folder[:-8] + '_1.vcf')
+					os.remove(folder[:-8] + '_1.fastq')
+					os.remove(folder[:-8] + '.chimera.bam')
+					os.remove(folder[:-8] + '.chimerasrt.bam')
+					os.remove(folder[:-8] + '_chimera.vcf')
+					os.remove(folder[:-8] + '_chimera.fastq')
 
-# 	os.chdir(args.workingdir)
+	os.chdir(args.workingdir)
 
-# 	# annotate phased fasta files with alternative phase
+	# annotate phased fasta files with alternative phase
 
-# 	for folder in direc:
-# 		if 'fastq' in folder:
-# 			os.chdir(args.workingdir + folder)
-# 			readir = os.listdir(args.workingdir + folder)
-# 			subprocess.call(["pwd"], shell=True)
-# 			for file in readir:
-# 				if file.endswith("0_Final.fasta"):
-# 					with open(file, 'r') as infile:
-# 	 					for line in infile:
-# 	 						if '>' in line:
-# 	 							print(line)
-# 	 							name = line.rstrip('\n') + '_ph0' + '\n'
-# 	 							print(name)
-# 	 							replaceAll(file, line, name)
-# 	os.chdir(args.workingdir)
+	for folder in direc:
+		if 'fastq' in folder:
+			os.chdir(args.workingdir + folder)
+			readir = os.listdir(args.workingdir + folder)
+			subprocess.call(["pwd"], shell=True)
+			for file in readir:
+				if file.endswith("0_Final.fasta"):
+					with open(file, 'r') as infile:
+	 					for line in infile:
+	 						if '>' in line:
+	 							print(line)
+	 							name = line.rstrip('\n') + '_ph0' + '\n'
+	 							print(name)
+	 							replaceAll(file, line, name)
+	os.chdir(args.workingdir)
 
-# 	for folder in direc:
-# 		if 'fastq' in folder:
-# 			os.chdir(args.workingdir + folder)
-# 			readir = os.listdir(args.workingdir + folder)
-# 			subprocess.call(["pwd"], shell=True)
-# 			for file in readir:
-# 				if file.endswith("1_Final.fasta"):
-# 					with open(file, 'r') as infile:
-# 	 					for line in infile:
-# 	 						if '>' in line:
-# 	 							print(line)
-# 	 							name = line.rstrip('\n') + '_ph1' + '\n'
-# 	 							print(name)
-# 	 							replaceAll(file, line, name)
+	for folder in direc:
+		if 'fastq' in folder:
+			os.chdir(args.workingdir + folder)
+			readir = os.listdir(args.workingdir + folder)
+			subprocess.call(["pwd"], shell=True)
+			for file in readir:
+				if file.endswith("1_Final.fasta"):
+					with open(file, 'r') as infile:
+	 					for line in infile:
+	 						if '>' in line:
+	 							print(line)
+	 							name = line.rstrip('\n') + '_ph1' + '\n'
+	 							print(name)
+	 							replaceAll(file, line, name)
  	os.chdir(args.workingdir)
 
 
@@ -346,7 +342,7 @@ else:
 							linspl=line.split(' ')[0]
 							linspl2=linspl.split('_')
 							print(linspl2)
-							name = line[:-1000] + linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[5] + linspl2[4] +'\n'
+							name = line[:-1000] + linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] +'_' +linspl2[5] +'\n'
 							print(name)
 							replaceAll(file, line, name)
 		sys.exit('Kept full sequence ID annotations; e.g. >L100_cl0_WA10_sampleid_0')
@@ -362,7 +358,7 @@ else:
 								linspl=line.split(' ')[0]
 								linspl2=linspl.split('_')
 								print(linspl2)
-								name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[5] + '\n'
+								name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
 								print(name)
 								replaceAll(file, line, name)
 			sys.exit('Annotated alignments as: >@@##_sampleid_0/1 (annotated with phase)')
