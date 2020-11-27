@@ -67,7 +67,7 @@ the latter annotates allopolyploids/hybrids with the top diploid blast hit and t
 The diploid hit annotation can be run as is to see where concatenated sets result in a phylogeny relative to diploids. Closely related sets can then
 be collapsed into one haplotype if they result as all being associated with the same diploid species, likewise other groupings associated with
 other diploid species should be collapsed. Concatenated sets with unclear placing should be removed from analysis.
-Once you have identified and re-concatenated the final sets based on the preliminary phylogeny, another phylogenetic analyses can be performed with the final concatenated homeolog/hybrid haplotypes.
+Once you have identified and re-concatenated the final sets based on the preliminary phylogeny, another phylogenetic analysis can be performed with the final concatenated homeolog/hybrid haplotypes.
 The current version of this script will output an entire set of locus-cluster alignments + the phased/annotated sequences of ONE allopolyploid/hybrid,
 future version will incorporate adding sequences for multiple allopolyploids into the same alignment.
 The script will accomodate multiple samples at once, but because we are re-aligning the entire Phase1 locus-cluster dataset for EVERY allopolyploid/hybrid sample,
@@ -88,8 +88,8 @@ BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
 	These Unique Identifiers are used to differentiate multiple samples of the same species (i.e. if multiple samples have the same 'species1id')
 3. WITHIN WORKING DIRECTORY MAKE THE FOLLOWING FOLDERS:
 	workingdirectory/diploids (this folder outputs Phase1 alignments)
-	workingdirectory/diploidclusters (This folder serves as a reference for allopolyploid/hybrid BLAST steps and will store locus-clusters)
-	workingdirectory/diploids_phased (if phasing with Phase2.py, this folder outputs Phase2 Phased alignments for diploids. 
+	workingdirectory/diploidclusters (This folder serves as a reference for allopolyploid/hybrid BLAST steps and will store unaligned and untrimmed locus-clusters)
+	workingdirectory/diploids_phased (if phasing with Phase2.py, this folder outputs Phase2 Phased alignments for diploids.)
 		***YOU WILL STILL HAVE TO RUN Phase2.phy with -cdbonly T if you wish to use Phase3.py to phase allopolyploids/hybrids without phasing in Phase2.phy)
 	workingdirectory/phaseset (if using Phase3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
 4. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
@@ -116,10 +116,10 @@ BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
 FLAGS:
 
 -wd WORKING DIRECTORY 
--ref PROBE REFERENCE DIRECTORY (FASTA FILE)
+-ref PROBE REFERENCE DIRECTORY (FASTA FILE). *DIRECTORY STRING MUST START AND END IN '/'. e.g: "-wd /workingdirectory/"
 -loci NUMBER OF REFERENCE LOCI
--c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .97 Recommended) 
--c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .65 Recommended, depends on taxonomic breadth of ingroup/outgroups; general guideline would be to set a higher id for 1-4 closely related outgroups, or lower for 4+ outgroups of varying genetic distance.) 
+-c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .90 - .97 Recommended) 
+-c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .75 Recommended, depends on taxonomic breadth of ingroup/outgroups; for a quick preliminary run starting at higher thresholds (i.e. 65%-75+%) will yield more conservative orthologous alignments, but may risk losing interspecies representation in output datasets as clades to species and individuals of a single ortholog are clustered at increasingly higher thresholds, respectively. For optimization a clustering sensitivity analysis should be preformed at a series of thresholds to determine the best threshold for generating orthologous locus clusters, depending on the genomic history of the organisms being studied) 
 -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
 -op (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
@@ -127,9 +127,9 @@ FLAGS:
 	RUNNING -reclust T IGNORES -c1 -cs -csl -csn VALUES, USING VALUES FROM PREVIOUS RUN; TO CHANGE THESE FLAGS YOU MUST RERUN Phase1.py WITH -reclust F  spades F -trimgalore F -op F
 -cs TAKE SPADES CONTIGS or SCAFFOLDS? (input as: scaffold or contig)
 -csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES
--csl ONLY TAKE CONTIGS LARGER THAN N LENGTH
+-csl ONLY TAKE CONTIGS LARGER THAN N LENGTH *THE PIPELINE WILL RETRIEVE CONTIGS/SCAFFOLDS THAT WERE LESS THAN DEFINED LENGTH, IF THOSE WERE THE ONLY SEQUENCES AVAILABLE FOR A REFERENCE LOCUS, THIS IS DONE TO IMPROVE FULL-REPRESENTATION DATASETS FOR ANLAYSES HAVING THIS REQUIREMENT. OUTPUT ALIGNMENTS SHOULD BE REFILTERED IF UNDESIRED.
 -al number of iterations for MAFFT alignments (1000 recommended)
--indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
+-indel indels have to be present in atleast XX% of sequences to be kept; 0.25 recommended for ~50 samples (INPUT AS DECIMAL)
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
 	-idformat full = >L100_cl0_@@##_sampleid_0 ; Keeps full anottation. If last annotation >0 signifies samples with multiple consensus alleles per locus-cluster; potential heterozygotes, discontinouos haplotype fragments or unclustered paralogs, may consider higher-c2 (among samples) or -c1 (within samples) clustering values
 	-idformat copies = >@@##_sampleid_0 ; Keeps sample id and consensus allele copy count per cluster. i.e. if last annotation >0 signifies samples with multiple consensus alleles per locus-cluster; see above
@@ -159,10 +159,10 @@ MAKE SURE YOU HAVE MADE THE /workingdirectory/diploids_phased/ DIRECTORY BEFORE 
 
 FLAGS:
 
--wd WORKING DIRECTORY (DIRECTORY STRING STARTING AND ENDING IN '/'. e.g: "-wd /workingdirectory/" should be the same directory used in Phase 1) 
+-wd WORKING DIRECTORY (STARTING AND ENDING IN '/'. e.g: "-wd /workingdirectory/" should be the same directory used in Phase 1) 
 -pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
 -al NUMBER OF ITERATIONS FOR MAFFT ALIGNMENTS (1000 recommended)
--indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
+-indel indels have to be present in atleast XX% of sequences to be ket; 0.25 recommended for ~50 samples (INPUT AS DECIMAL)
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL FASTA ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
 	-idformat full = >L100_cl0_@@##_sampleid_0 ; Keeps full anottation. (Locus_ClusterID_@@##_sampleid_phase)
 	-idformat phase = >@@##_sampleid_0 ; RECOMMENDED FOR PHASING. Keeps sample id and phase. i.e. if last annotation >1 signifies samples with multiple consensus alleles per locus-cluster that were phased.
@@ -200,17 +200,17 @@ FLAGS
 -wd WORKING DIRECTORY 
 -ref PROBE REFERENCE DIRECTORY (FASTA FILE) SAME AS Phase1.py
 -loci NUMBER OF REFERENCE LOCI SAME AS Phase1.py
--c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .90 Recommended) 
+-c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .90 Recommended For allopolyploids) 
 -trimgalore RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
--onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trimgalore and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
+-onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING?; RUN AGAIN WITH -trimgalore and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
 -cs TAKE SPADES CONTIGS or SCAFFOLDS? (MUST INPUT AS: scaffold or contig)
 -csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES. DEPENDING ON SUSPECTED PLOIDY, MULTIPLY BY 2 TO ACCOUNT FOR HETEROZYGOUS VARIANTS (i.e. tetraploid 4*2=8, triploid 3*2=6. 8-10 for unknown samples is recommended)
 -csl ONLY TAKE CONTIGS/SCAFFOLDS LARGER THAN N LENGTH
 -pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
 -n PERCENT OF MISSING DATA (N) ALLOWED IN PHASED SEQUENCES? (atleast 50% bp representation recommended, input as -n 50 , NOT AS DECIMAL)
 -al number of iterations for MAFFT alignments (1000 recommended)
--indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
+-indel indels have to be present in atleast XX% of sequences to be kept; 0.25 recommended for ~50 samples (INPUT AS DECIMAL)
 
 
 ***Make 'F' if you have already RUN TRIMGALORE or SPADES for your paired end reads
