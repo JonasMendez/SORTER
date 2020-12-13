@@ -24,10 +24,6 @@ import glob
 # Jonas Mendez-Reneau1, Erin Sigel1
 # University of Louisiana Lafayette
 
-#CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
-
-#Cite as: Mendez-Reneau JI, Sigel EM (2020) University of Louisiana, Lafayette DOI: 10.5281/zenodo.4265500
-
 # Contact:jonasmrgrad@gmail.com
 
 # BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
@@ -70,8 +66,8 @@ import glob
 # -wd WORKING DIRECTORY 
 # -ref PROBE REFERENCE DIRECTORY (FASTA FILE)
 # -loci NUMBER OF REFERENCE LOCI
-# -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .97 Recommended) 
-# -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .65 Recommended, depends on taxonomic breadth of ingroup/outgroups; general guideline would be to set a higher id for 1-4 closely related outgroups, or lower for 4+ outgroups of varying genetic distance.) 
+# -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .97 Recommended, INPUT AS DECIMAL) 
+# -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .65 Recommended***, INPUT AS DECIMAL. ***depends on taxonomic breadth of ingroup/outgroups;sensitivity analysis at different thresholds should be anlayzed for optimal clustering) 
 # -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 # -spades RUN SPADES ASSEMBLY? (T/F)***
 # -onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
@@ -101,7 +97,8 @@ import glob
 # folders have ..._R1.fastq extensions as unique identifiers for the script.
 
 # TYPICAL COMMAND LINE
-# python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -loci 450 -c1 .85 -c2 .60 -spades T -trimgalore T -cs contig -csn 6 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+# python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -loci 450 -c1 .85 -c2 .60 -cs contig -csn 8 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-wd", "--workingdir")
 parser.add_argument("-c1", "--clust1id")
@@ -136,7 +133,7 @@ def replaceAll(file,searchExp,replaceExp):
         sys.stdout.write(line)
 
 
-print('SORTED Phase 1 will run with the following settings:'+ '\n' + 'Working Directory = ' + args.workingdir + '\n' + 'Only Run Trimgalore/Spades?= '+ args.onlyprocess + '\n'  +'Trim Raw Reads?=' + args.trimgalore + '\n' 'Spades Assembly? =' + args.spadesassembly + '\n' + 'Only doing reclustering step?=' + args.recluster + '\n' +'Use Spades contigs or scaffolds?=' + args.contigscaf + '\n' + 'Max Number of contigs/scaffolds per locus to use for consensus alleles = ' + args.contigscafnum + '\n' + ' Max length of contig/scaffolds retrieved = ' + args.contigscaflen + '\n' + 'Consensus Alleles (Within Samples) Clustering ID = ' + args.clust1id + '\n' +'Locus-Cluster (Among Samples) Clustering ID = ' + args.clust2id + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep)
+print('SORTED Phase 1 will run with the following settings:'+ '\n' + 'Working Directory= ' + args.workingdir + '\n' + 'Only Run Trimgalore/Spades?= '+ args.onlyprocess + '\n'  +'Trim Raw Reads?= ' + args.trimgalore + '\n' 'Spades Assembly? =' + args.spadesassembly + '\n' + 'Only doing reclustering step?=' + args.recluster + '\n' +'Use Spades contigs or scaffolds?=' + args.contigscaf + '\n' + 'Max Number of contigs/scaffolds per locus to use for consensus alleles = ' + args.contigscafnum + '\n' + ' Max length of contig/scaffolds retrieved = ' + args.contigscaflen + '\n' + 'Consensus Alleles (Within Samples) Clustering ID = ' + args.clust1id + '\n' +'Locus-Cluster (Among Samples) Clustering ID = ' + args.clust2id + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep)
 
 
 if args.recluster is 'F':
@@ -391,8 +388,8 @@ if args.recluster is 'F':
 								continue
 					else:
 						continue
-						break
-				print('Contigs compiled, re-run Phase1.py with -reclust T to continue pipeline and generate locus clusters')
+						
+				sys.exit('Contigs compiled, re-run Phase1.py with -reclust T to continue pipeline and generate locus clusters')
 else:
 
 	os.chdir(args.workingdir)
