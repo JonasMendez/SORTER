@@ -102,6 +102,11 @@ for file in os.listdir(diploidclusters):
 		with open(file, 'a+') as cluster:
 			cluster.write('\n')
 
+os.chdir(diploidclusters)
+
+subprocess.call("cat *degap.fasta > ALLsamples_allcontigs_allbaits_clusterannotated.fasta", shell=True)
+subprocess.call("usearch -makeudb_usearch ALLsamples_allcontigs_allbaits_clusterannotated.fasta -output diploid_master.udb", shell=True)
+
 if args.clustdb is 'T':
 	sys.exit('-cdbonly = T ; Locus-Clusters ready for use in Phase3.py blast database. Exiting.')		
 else:	
