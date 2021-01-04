@@ -133,7 +133,7 @@ def replaceAll(file,searchExp,replaceExp):
         sys.stdout.write(line)
 
 
-print('SORTED Phase 1 will run with the following settings:'+ '\n' + 'Working Directory= ' + args.workingdir + '\n' + 'Only Run Trimgalore/Spades?= '+ args.onlyprocess + '\n'  +'Trim Raw Reads?= ' + args.trimgalore + '\n' 'Spades Assembly? =' + args.spadesassembly + '\n' + 'Only doing reclustering step?=' + args.recluster + '\n' +'Use Spades contigs or scaffolds?=' + args.contigscaf + '\n' + 'Max Number of contigs/scaffolds per locus to use for consensus alleles = ' + args.contigscafnum + '\n' + ' Max length of contig/scaffolds retrieved = ' + args.contigscaflen + '\n' + 'Consensus Alleles (Within Samples) Clustering ID = ' + args.clust1id + '\n' +'Locus-Cluster (Among Samples) Clustering ID = ' + args.clust2id + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep)
+print('SORTED Phase 1 will run with the following settings:'+ '\n' + 'Working Directory= ' + args.workingdir + '\n' + 'Only Run Trimgalore/Spades?= '+ args.onlyprocess + '\n'  +'Trim Raw Reads?= ' + args.trimgalore + '\n' 'Spades Assembly? =' + args.spadesassembly + '\n' + 'Only doing reclustering step?=' + args.recluster + '\n' +'Use Spades contigs or scaffolds?=' + args.contigscaf + '\n' + 'Max Number of contigs/scaffolds per locus to use for consensus alleles = ' + args.contigscafnum + '\n' + ' Max length of contig/scaffolds retrieved = ' + args.contigscaflen + '\n' + 'Consensus Alleles (Within Samples) Clustering ID = ' + args.clust1id + '\n' +'Locus-Cluster (Among Samples) Clustering ID = ' + args.clust2id + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep )
 
 
 if args.recluster is 'F':
@@ -529,7 +529,7 @@ else:
 	os.chdir(contigdir)
 
 	#Define Cluster IDs
-	clustid= ["cl%d_" % x for x in range(100)]
+	clustid= ["cl%d_" % x for x in range(1000)]
 
 	# # Annotate sequences with locus-cluster id:
 	for file in os.listdir(contigdir):
