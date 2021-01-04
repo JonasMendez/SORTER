@@ -24,10 +24,6 @@ import glob
 # Jonas Mendez-Reneau1, Erin Sigel1
 # University of Louisiana Lafayette
 
-#CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
-
-#cite as: Mendez-Reneau JI, Sigel EM (2020) University of Louisiana, Lafayette DOI: 10.5281/zenodo.4265500
-
 # Contact:jonasmrgrad@gmail.com
 
 #BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
@@ -81,8 +77,8 @@ import glob
 #folders have ..._R1.fastq extensions as unique identifiers for the script.
 
 
-#TYPICAL COMMAND LINE
-#python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -loci 450 -spades T -trimgalore T -op F -c1 .85 -cs contig -csn 6 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
+#COMMAND LINE EXAMPLE
+#python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -loci 450  -spades T -trimgalore T -op F -c1 .85 -cs contig -csn 6 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-wd", "--workingdir")
@@ -170,29 +166,29 @@ else:
 	else:
 
 #Map Contigs to Rereferences
-			os.chdir(phaseset)
+		os.chdir(phaseset)
 
-			for folder in os.listdir(phaseset):
-				if 'R1' in folder:
-					os.chdir(phaseset + folder)
-					dirpath =  phaseset + folder + "/"
-					iterpath = os.listdir(dirpath)
-					read = folder[:-6] + 'R1_val_1.fq'
-					R2 = read[:-6] + 'R2_val_2.fq'
-					for file in iterpath:
-						if file.endswith("_hybrid_assembly"):
-							os.chdir(phaseset + folder + "/" + file + "/")
-							filepath =  phaseset + folder + "/" + file + "/"
-							iterpath2 = os.listdir(filepath)
-							for contig in iterpath2:
-								if contig.endswith(args.contigscaf + "s.fasta"):
-									conscontig= args.refdir
-									subprocess.call(["bwa mem -V %s %s > %s_%smap.sam" % (conscontig, contig, folder, args.contigscaf)], shell=True)
-									subprocess.call(["samtools view -S -F 4 *_%smap.sam | awk -v OFS='\t' '{print \"> \" $3 \"\\n \" $10}' > %smap.fa " % (args.contigscaf, folder + '_' + args.contigscaf)], shell=True)
-									src = folder + args.contigscaf + 'map.fa'
-									dst = dirpath + folder + '_' + args.contigscaf + 'map.fa'
-									os.rename(src, dst)
-									os.remove(folder + '_' + args.contigscaf + 'map.sam')
+		for folder in os.listdir(phaseset):
+			if 'R1' in folder:
+				os.chdir(phaseset + folder)
+				dirpath =  phaseset + folder + "/"
+				iterpath = os.listdir(dirpath)
+				read = folder[:-6] + 'R1_val_1.fq'
+				R2 = read[:-6] + 'R2_val_2.fq'
+				for file in iterpath:
+					if file.endswith("_hybrid_assembly"):
+						os.chdir(phaseset + folder + "/" + file + "/")
+						filepath =  phaseset + folder + "/" + file + "/"
+						iterpath2 = os.listdir(filepath)
+						for contig in iterpath2:
+							if contig.endswith(args.contigscaf + "s.fasta"):
+								conscontig= args.refdir
+								subprocess.call(["bwa mem -V %s %s > %s_%smap.sam" % (conscontig, contig, folder, args.contigscaf)], shell=True)
+								subprocess.call(["samtools view -S -F 4 *_%smap.sam | awk -v OFS='\t' '{print \"> \" $3 \"\\n \" $10}' > %smap.fa " % (args.contigscaf, folder + '_' + args.contigscaf)], shell=True)
+								src = folder +'_'+ args.contigscaf + 'map.fa'
+								dst = dirpath + folder + '_' + args.contigscaf + 'map.fa'
+								os.rename(src, dst)
+								os.remove(folder + '_' + args.contigscaf + 'map.sam')
 		os.chdir(phaseset)
 
 		#Make fasta files for contigs which mapped to the same reference
@@ -241,7 +237,7 @@ else:
 		   								replaceAll(file, line, name)		
 		os.chdir(phaseset)
 
-		print('Take ' + args.contigscafnum + ' longest scaffolds for each locus per sample, then removing any scaffolds smaller than ' + args.contigscaflen + ' bp')
+		print('Take ' + args.contigscafnum + ' longest '+args.contigscaf+' for each locus per sample, then removing any '+args.contigscaf+'s smaller than ' + args.contigscaflen + ' bp')
 
 		#Take longest contig from contig set
 		for folder in os.listdir(phaseset):
@@ -257,8 +253,25 @@ else:
 
 		os.chdir(phaseset)
 
+		print('Retrieve '+args.contigscaf+' that were less than '+ args.contigscaflen+', if those were the longest '+args.contigscaf+'s for the locus')
+		#Retrieve contigs that were less than the user defined limit, if those were the longest contigs. This is done to improve coverage needed for analyses (i.e. MSC via STACEY or *BEAST) requiring full sample representation 
+		for folder in os.listdir(phaseset):
+			if 'fastq' in folder:
+				os.chdir(phaseset + folder)
+				readir = os.listdir(phaseset + folder)
+				for file in readir:
+					if file.endswith('longestfiltered.fa'):
+						if os.path.getsize(file) == 0:
+							os.remove(file)
+							src =phaseset + folder + '/' + file[:-18] + 'longest.fa'
+							#print(src)
+							dst =phaseset + folder + '/' + file
+							#print(dst)
+							os.rename(src, dst)
+							#print(file)
+
 		#cluster highly similar contigs (i.e collapsing heterozygotes, or possibly homeologues depending on genetic distance)
-		print('Clustering ' + args.contigscaf +'s ' + 'into Consensus Alleles at' + args.clust1id + ' Identity Threshold')
+		print('Clustering ' + args.contigscaf +'s ' + 'into Consensus Homeologs at' + args.clust1id + ' Identity Threshold')
 
 		for folder in os.listdir(phaseset):
 			if 'R1' in folder:
@@ -433,9 +446,7 @@ else:
 
 # 		#concatenate cluster annotated baits for diploids and make database
  		os.chdir(diploidclusters)
-
-		subprocess.call("cat *degap.fasta > ALLsamples_allcontigs_allbaits_clusterannotated.fasta", shell=True)
-		subprocess.call("usearch -makeudb_usearch ALLsamples_allcontigs_allbaits_clusterannotated.fasta -output diploid_master.udb", shell=True)
+ 		
 		diploid_db = '/project/emsigel/jonasmr/rawreads/clean-fastq/diploidclusters/diploid_master.udb'
 
 		os.chdir(phaseset)
