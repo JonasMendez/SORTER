@@ -118,8 +118,8 @@ FLAGS:
 -wd WORKING DIRECTORY 
 -ref PROBE REFERENCE DIRECTORY (FASTA FILE). *DIRECTORY STRING MUST START AND END IN '/'. e.g: "-wd /workingdirectory/"
 -loci NUMBER OF REFERENCE LOCI
--c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .90 - .97 Recommended) 
--c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .55 - .75 Recommended, depends on taxonomic breadth of ingroup/outgroups; for a quick preliminary run starting at higher thresholds (i.e. 65%-75+%) will yield more conservative orthologous alignments, but may risk losing interspecies representation in output datasets as clades to species and individuals of a single ortholog are clustered at increasingly higher thresholds, respectively. For optimization a clustering sensitivity analysis should be preformed at a series of thresholds to determine the best threshold for generating orthologous locus clusters, depending on the genomic history of the organisms being studied) 
+-c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .97-.99 Recommended) 
+-c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .50 - .80 Recommended, depends on taxonomic breadth of ingroup/outgroups; for a quick preliminary run starting at higher thresholds (i.e. 65%-75+%) will yield more conservative orthologous alignments, but may risk losing interspecies representation in output datasets as clades to species and individuals of a single ortholog are clustered at increasingly higher thresholds, respectively. For optimization a clustering sensitivity analysis should be preformed at a series of thresholds to determine the best threshold for generating orthologous locus clusters, depending on the genomic history of the organisms being studied) 
 -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
 -op (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
