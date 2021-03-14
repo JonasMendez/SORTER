@@ -55,7 +55,7 @@ import glob
 #-csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES. DEPENDING ON SUSPECTED PLOIDY, MULTIPLY BY 2 (i.e. tetraploid 4*2=8, triploid 3*2=6 ; if heterozygous variants are rertieved. 8-10 for unknown samples is recommended)
 #-csl ONLY TAKE CONTIGS/SCAFFOLDS LARGER THAN N LENGTH
 #-pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
-#-n PROPORTION OF MISSING DATA (N)
+#-n PROPORTION OF MISSING DATA ALLOWED IN FINAL CONTIGFS (N)
 # ALLOWED IN PHASED SEQUENCES? (atleast 50% bp representation recommended, input as -n 50 , NOT AS DECIMAL)
 #-al number of iterations for MAFFT alignments (1000 recommended)
 #-indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
@@ -105,6 +105,7 @@ baitid1= ["L%d_" % x for x in range(int(args.locinum))]
 baitid= ["L%d" % x for x in range(int(args.locinum))]
 diploidclusters=args.workingdir + 'diploidclusters/'
 keeplongest=args.workingdir + 'keeplongest.py'
+diploid_db = args.workingdir + 'diploidclusters/diploid_master.udb'
 
 # #Define command to change sequence IDs
 def replaceAll(file,searchExp,replaceExp):
@@ -164,6 +165,23 @@ else:
 
 			sys.exit("--onlyprocess = T, exiting script")
 	else:
+
+		os.chdir(phaseset)
+
+		print("Clearing previous Phase3 data...")
+		for folder in os.listdir(phaseset):
+			if folder.endswith(".fastq"):
+				os.chdir(phaseset + folder)
+				dirpath =  phaseset + folder + "/"
+				iterpath = os.listdir(dirpath)
+				for file in iterpath:
+					if 'diploidclusters' in file:
+						shutil.rmtree(dirpath + file)
+					else:
+						if not 'spades_hybrid_assembly' in file:
+							if not '_val_' in file:
+								os.remove(dirpath + file)										
+
 
 #Map Contigs to Rereferences
 		os.chdir(phaseset)
@@ -386,7 +404,7 @@ else:
 				os.chdir(phaseset + file)
 				path=phaseset + file
 				for seqs in os.listdir(path):
-					if seqs.endswith("annotated_final.fasta"):
+					if seqs.endswith("_final.fasta"):
 						print(seqs)
 						subprocess.call(["python %s %s %s %s" % (seqclean, seqs, args.contigscaflen, args.phasen)], shell=True)
 						os.remove(seqs)
@@ -441,13 +459,19 @@ else:
 						os.remove(folder[:-8] + '.chimerasrt.bam')
 						os.remove(folder[:-8] + '_chimera.vcf')
 						os.remove(folder[:-8] + '_chimera.fastq')
-
-		os.chdir(phaseset)
-
-# 		#concatenate cluster annotated baits for diploids and make database
- 		os.chdir(diploidclusters)
- 		
-		diploid_db = '/project/emsigel/jonasmr/rawreads/clean-fastq/diploidclusters/diploid_master.udb'
+						for bam in os.listdir(phaseset + folder):
+							if bam.endswith("mapreads.bam"):
+								statfilename = folder[:-8] + "readstats.txt"
+								with open(os.path.join(args.workingdir + folder, statfilename), 'a+') as statfile:
+									statfile.write( folder[:-8] + " Read Statistics" + '\n')
+									statfile.write("Proportion of Reads that Mapped to Locus-Cluster Reference" + "\n")
+									subprocess.call(["samtools flagstat %s >> %s" % (folder[:-8] + "mapreads.bam", statfilename)], shell=True)
+									statfile.write("Mean Read Depth" + "\n")
+									subprocess.call(["samtools depth -a %s | awk '{c++;s+=$3}END{print s/c}' >> %s" % (folder[:-8] + "mapreads.bam", statfilename)], shell=True)
+									statfile.write("Breadth of Coverage" + "\n")
+									subprocess.call(["samtools depth -a %s | awk '{c++; if($3>0) total+=1}END{print (total/c)*100}' >> %s" % (folder[:-8] + "mapreads.bam", statfilename)], shell=True)
+									statfile.close()
+									os.remove(folder[:-8] + 'mapreads.bam')
 
 		os.chdir(phaseset)
 
@@ -477,7 +501,7 @@ else:
 						subprocess.call(["usearch -usearch_global %s -db %s -id 0.9 -top_hit_only -blast6out %s_hits.txt -strand plus" % (file[:-6]+'_cap.fasta', diploid_db, file[:-12])], shell=True)
 
 
-		#Compile Polyploid into Diploid locus-cluster dataset, respectively
+		#Compile Polyploid into Diploid unphased locus-cluster dataset, respectively
 
 		for folder in os.listdir(phaseset):
 			if 'R1' in folder:
@@ -585,8 +609,8 @@ else:
 
 		os.chdir(phaseset)
 
-		# #Keep longest seq if two identical sequence ids are present (i.e. diploid/polyploid samples with multiple consensus alleles/cluster)
-		print('Keeping longest seq if two identical sequence ids are present (i.e. diploid/polyploid samples with multiple sequences/cluster) ''\n' + 'These may represent heterozygous variants retrieved before phasing, discontinouos haplotype fragments or unclustered paralogs)')
+		# #Keep longest seq if two identical sequence ids are present (i.e. diploid/polyploid samples with multiple consensus alleles/cluster; allopolyploids that did not differentiat homeologs)
+		print('Keeping longest seq if two identical sequence ids are present (i.e. diploid/polyploid samples with multiple sequences/cluster) ''\n')
 
 		for folder in os.listdir(phaseset):
 			if 'fastq' in folder:
