@@ -46,7 +46,7 @@ General Definition of Phases and Output:
 ########################################
 
 Phase1.py
-This script will generate clustered consensus alleles at a user set clustering threshold (.65-.70 recommended) for all of your samples and output them as alignments (per locus-cluster).
+This script will generate clustered consensus alleles at a user set clustering threshold (Sensitivity analysis of a range of identities [i.e. 50-80&] recommended to assess the relative effect of consensus allele copy number per locus-cluster) for all of your samples and output them as alignments (per locus-cluster).
 The clustering is done to separate out potential paralogs because Target-Enrichment will often amplify them in non-model systems.
 If you are interested in using this pipeline to look at possible parentage in known allopolyploids/hybrids, or identify cryptic hybrids/allopolyploids
 in your current dataset, use scripts Phase2.py and Phase3.py after determining an appropriate clustering threshold with Phase1.py -reclust option.
