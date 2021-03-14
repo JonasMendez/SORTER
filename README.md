@@ -200,7 +200,7 @@ FLAGS
 -wd WORKING DIRECTORY 
 -ref PROBE REFERENCE DIRECTORY (FASTA FILE) SAME AS Phase1.py
 -loci NUMBER OF REFERENCE LOCI SAME AS Phase1.py
--c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .85 - .90 Recommended For allopolyploids) 
+-c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .99 Recommended) 
 -trimgalore RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
 -spades RUN SPADES ASSEMBLY? (T/F)***
 -onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING?; RUN AGAIN WITH -trimgalore and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
