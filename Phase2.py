@@ -28,7 +28,7 @@ import glob
 
 # PHASE 2 OF THE SORTED PIPELINE TAKES THE LOCUS-CLUSTER DATASET GENERATED IN PHASE 1 AND PHASES CONSENSUS ALLELES BY REMAPPING TRIMMED READS TO SAMPLE-SPECIFIC LOCUS-CLUSTERS
 
-# -wd WORKING DIRECTORY (DIRECTORY STRING STARTING AND ENDING IN '/'. e.g: "-wd /workingdirectory/" should be the same directory used in Phase 1) 
+# -wd WORKING DIRECTORY (DIRECTORY STRING STARTING AND ENDING IN '/'. e.g: "-wd /workingdirectory/" should be the cleanfastq directory created in Phase 1) 
 # -pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
 # -al NUMBER OF ITERATIONS FOR MAFFT ALIGNMENTS (1000 recommended)
 # -indel indels have to be present in atleast XX% of sequences to be kept (0.25 recommended for ~50 samples, be aware of the number of samples you are processing)
@@ -69,7 +69,67 @@ def replaceAll(file,searchExp,replaceExp):
             line = line.replace(searchExp,replaceExp)
         sys.stdout.write(line)
 
-print('SORTED Phase 2 will run with the following settings:' + '\n' + 'Working Directory = ' + args.workingdir + '\n' + 'PHASE CALLING DEPTH (SAMTOOLS PHASE -Q)= ' + args.phasequal + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep + '\n' + 'Alignment Sequence ID Format= ' + args.idformat +'\n'+ 'Only Format Locus-Clusters?= ' + args.clustdb +'\n')
+print('SORTED Phase 2 will run with the following settings:' + '\n' + 'Working Directory = ' + args.workingdir + '\n' + 'SAMTOOLS PHASE -Q= ' + args.phasequal + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep + '\n' + 'Alignment Sequence ID Format= ' + args.idformat +'\n'+ 'Only Format Locus-Clusters?= ' + args.clustdb + '\n')
+
+
+print("Removing any previous phase files...")
+
+os.chdir(phasedir)
+
+for file in os.listdir(phasedir):
+	os.remove(phasedir + file)
+
+os.chdir(diploidclusters)
+
+for folder in os.listdir(args.workingdir):
+	if folder.endswith("iploidclusters"):
+		os.chdir(args.workingdir + folder)
+		dirpath =  args.workingdir + folder + "/"
+		iterpath = os.listdir(dirpath)
+		for file in iterpath:
+			if file.endswith('_degap.fasta'):
+				os.remove(dirpath + file)
+
+for folder in os.listdir(args.workingdir):
+	if folder.endswith("iploidclusters"):
+		os.chdir(args.workingdir + folder)
+		dirpath =  args.workingdir + folder + "/"
+		iterpath = os.listdir(dirpath)
+		for file in iterpath:
+			if file.endswith('master.udb'):
+				os.remove(dirpath + file)
+
+for folder in os.listdir(args.workingdir):
+	if folder.endswith("iploidclusters"):
+		os.chdir(args.workingdir + folder)
+		dirpath =  args.workingdir + folder + "/"
+		iterpath = os.listdir(dirpath)
+		for file in iterpath:
+			if file.endswith('clusterannotated.fasta'):
+				os.remove(dirpath + file)
+
+os.chdir(args.workingdir)
+
+for folder in os.listdir(args.workingdir):
+	if folder.endswith("R1.fastq"):
+		os.chdir(args.workingdir + folder)
+		for file in os.listdir(args.workingdir + folder):
+			if file.endswith('Final.fasta'):
+				os.remove(args.workingdir + folder + '/' + file)
+
+for folder in os.listdir(args.workingdir):
+	if folder.endswith("R1.fastq"):
+		os.chdir(args.workingdir + folder)
+		for file in os.listdir(args.workingdir + folder):
+			if file.endswith('chimera.fasta'):
+				os.remove(args.workingdir + folder + '/' + file)
+
+for folder in os.listdir(args.workingdir):
+	if folder.endswith("R1.fastq"):
+		os.chdir(args.workingdir + folder)
+		for file in os.listdir(args.workingdir + folder):
+			if file.endswith('.bam'):
+				os.remove(args.workingdir + folder + '/' + file)
 
 
 #Degap locus-clusters
@@ -104,13 +164,53 @@ for file in os.listdir(diploidclusters):
 
 os.chdir(diploidclusters)
 
+#make ublast data
 subprocess.call("cat *degap.fasta > ALLsamples_allcontigs_allbaits_clusterannotated.fasta", shell=True)
 subprocess.call("usearch -makeudb_usearch ALLsamples_allcontigs_allbaits_clusterannotated.fasta -output diploid_master.udb", shell=True)
 
 if args.clustdb is 'T':
 	sys.exit('-cdbonly = T ; Locus-Clusters ready for use in Phase3.py blast database. Exiting.')		
 else:	
+	print('Preparing Phase Directories...')
 
+	for folder in os.listdir(args.workingdir):
+		if folder.endswith(".fastq"):
+			os.chdir(args.workingdir + folder)
+			dirpath =  args.workingdir + folder + "/"
+			iterpath = os.listdir(dirpath)
+			for file in iterpath:
+				if "annotated.fasta" in file:
+					os.remove(dirpath + file)
+
+	for folder in os.listdir(args.workingdir):
+		if folder.endswith(".fastq"):
+			os.chdir(args.workingdir + folder)
+			dirpath =  args.workingdir + folder + "/"
+			iterpath = os.listdir(dirpath)
+			for file in iterpath:
+				if "Final.fasta" in file:
+					os.remove(dirpath + file)
+
+	for folder in os.listdir(args.workingdir):
+		if folder.endswith(".fastq"):
+			os.chdir(args.workingdir + folder)
+			dirpath =  args.workingdir + folder + "/"
+			iterpath = os.listdir(dirpath)
+			for file in iterpath:
+				if "chimera.fasta" in file:
+					os.remove(dirpath + file)
+
+	for folder in os.listdir(args.workingdir):
+		if folder.endswith(".fastq"):
+			os.chdir(args.workingdir + folder)
+			dirpath =  args.workingdir + folder + "/"
+			iterpath = os.listdir(dirpath)
+			for file in iterpath:
+				if "mapreads.bam" in file:
+					os.remove(dirpath + file)
+
+	os.chdir(diploidclusters)
+	
 	# # ##Recompile sample specific clusterbaits into fastq folders for readmapping
 	for file in os.listdir(diploidclusters):
 		if 'deinterleaved' in file:
@@ -157,9 +257,9 @@ else:
 					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.0.bam', folder[:-8] + '.0srt.bam')], shell=True)
 					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.1.bam', folder[:-8] + '.1srt.bam')], shell=True)
 					subprocess.call(["samtools sort  %s -o %s" % (folder[:-8] + '.chimera.bam', folder[:-8] + '.chimerasrt.bam')], shell=True)
-					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.0srt.bam', folder[:-8] + '_0.vcf' )], shell=True)
-					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.1srt.bam', folder[:-8] + '_1.vcf' )], shell=True)
-					subprocess.call(["bcftools mpileup -Ov -d 500 -f %s %s | bcftools call -c -Ov -o %s " % (baits, folder[:-8] + '.chimerasrt.bam', folder[:-8] + '_chimera.vcf' )], shell=True)
+					subprocess.call(["bcftools mpileup -B --min-BQ 20 -Ov -d 500 -f %s %s | bcftools call -c --ploidy 1 -Ov -p .0001 -o %s " % (baits, folder[:-8] + '.0srt.bam', folder[:-8] + '_0.vcf' )], shell=True)
+					subprocess.call(["bcftools mpileup -B --min-BQ 20 -Ov -d 500 -f %s %s | bcftools call -c --ploidy 1 -Ov -p .0001 -o %s " % (baits, folder[:-8] + '.1srt.bam', folder[:-8] + '_1.vcf' )], shell=True)
+					subprocess.call(["bcftools mpileup -B --min-BQ 20 -Ov -d 500 -f %s %s | bcftools call -c --ploidy 1 -Ov -p .0001 -o %s " % (baits, folder[:-8] + '.chimerasrt.bam', folder[:-8] + '_chimera.vcf' )], shell=True)
 					subprocess.call(["tabix %s" % (folder[:-8] + '_0.vcf')], shell=True)
 					subprocess.call(["tabix %s" % (folder[:-8] + '_1.vcf')], shell=True)
 					subprocess.call(["tabix %s" % (folder[:-8] + '_chimera.vcf')], shell=True)
@@ -169,7 +269,6 @@ else:
 					subprocess.call(["seqtk seq -A %s > %s_0_Final.fasta" % (folder[:-8] + '_0.fastq', folder[:-8])], shell=True)
 					subprocess.call(["seqtk seq -A %s > %s_1_Final.fasta" % (folder[:-8] + '_1.fastq', folder[:-8])], shell=True)
 					subprocess.call(["seqtk seq -A %s > %s_chimera.fasta" % (folder[:-8] + '_chimera.fastq', folder[:-8])], shell=True)
-					os.remove(folder[:-8] + 'mapreads.bam')
 					os.remove(folder[:-8] + 'mapreads.sam')
 					os.remove(folder[:-8] + '.0.bam')
 					os.remove(folder[:-8] + '.0srt.bam')
@@ -183,6 +282,20 @@ else:
 					os.remove(folder[:-8] + '.chimerasrt.bam')
 					os.remove(folder[:-8] + '_chimera.vcf')
 					os.remove(folder[:-8] + '_chimera.fastq')
+					#generate rad statistics text file
+					for bam in os.listdir(args.workingdir + folder):
+						if bam.endswith("mapreads.bam"):
+							statfilename = folder[:-8] + "readstats.txt"
+							with open(os.path.join(args.workingdir + folder, statfilename), 'a+') as statfile:
+								statfile.write( folder[:-8] + " Read Statistics" + '\n')
+								statfile.write("Proportion of Reads that Mapped to Locus-Cluster Reference" + "\n")
+								subprocess.call(["samtools flagstat %s >> %s" % (folder[:-8] + "mapreads.bam", statfilename)], shell=True)
+								statfile.write("Mean Read Depth" + "\n")
+								subprocess.call(["samtools depth -a %s | awk '{c++;s+=$3}END{print s/c}' >> %s" % (folder[:-8] + "mapreads.bam", statfilename)], shell=True)
+								statfile.write("Breadth of Coverage" + "\n")
+								subprocess.call(["samtools depth -a %s | awk '{c++; if($3>0) total+=1}END{print (total/c)*100}' >> %s" % (folder[:-8] + "mapreads.bam", statfilename)], shell=True)
+								statfile.close()
+								os.remove(folder[:-8] + 'mapreads.bam')
 
 	os.chdir(args.workingdir)
 
@@ -304,7 +417,7 @@ else:
 	ph0 = ["{}{}".format(i,'ph0') for i in columns]
 	ph1 = ["{}{}".format(i,'ph1') for i in columns]
 	header = ['baitcluster']+ph0+ph1
-	#print header
+	
 	with open('ALLsamples_allcontigs_allbaits_SUMMARY_TABLE_phased.csv', 'wb') as outfile:
 		writer = csv.writer(outfile)
 		writer.writerow(header)
@@ -315,7 +428,7 @@ else:
 
  	os.chdir(phasedir)
 
-	#Align and trim clusterbaits. Regions which don't share overlap (i.e. region with unique indel) in atleast 25 percent of the samples are removed. All clusters with single sequences not aligned and compiled downstream
+	#Align and trim clusterbaits. Regions which don't share overlap (i.e. region with unique indel) in atleast x percent of the samples are removed. All clusters with single sequences not aligned and compiled downstream
 	#Keep nontrimmed alignment; compare?
 
 	for file in os.listdir(phasedir):
@@ -327,7 +440,7 @@ else:
 		if file.endswith('_al.fasta'):
 			os.remove(file)
 
-	# # # #deinterleave
+	 #deinterleave
 	for file in os.listdir(phasedir):
 		if 'trimmed' in file:
 			print("deinterleaving " + file)
