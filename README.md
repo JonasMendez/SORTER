@@ -120,7 +120,7 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 	
 	workingdirectory/cleanfastq/diploids_phased (if phasing with Stage2.py, this folder outputs phased alignments.)
 	
-	workingdirectory/phaseset (if using Stage3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
+	workingdirectory/cleanfastq/phaseset (if using Stage3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
 	
 
 4. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
