@@ -10,11 +10,11 @@ CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
 
 SORTER is a flexible user-customizable set of python scripts for building a variety of locus-alignment matrices from target-enrichment datasets. The three overarching goals of the pipeline are to:
 
-1. Build multiple sequence alignments of orthologous sequences for hundreds or thousands of loci generated from target-enrichment datasets. SORTER allows the exploration of orthology among sequences associated with targeted reference loci using within and among sample identity clustering (USEARCH). Given appropriate clustering identity, this can filter and separate paralogs derived from the same locus into separate orthologous sets across all samples, effectively generating additional loci for analysis when paralogs are present. 
+1. Builds multiple sequence alignments of orthologous sequences for loci generated from paired-end reads in target-enrichment datasets. The initial purpose of this pipeline was to reduce multi-copy sequences due to heterozygosity or paralogy by identity clustering within and among samples for the same reference locus. The pipeline generates consensus alleles from heterozygous variants by clustering contigs associated with the same reference locus and sample to generate consensus sequences presumably representing allelic variation at IUPAC ambiguity sites. The pipeline then maps consensus alleles for all samples to the same reference and does a second round of clustering among samples to separate potential paralogs. Given appropriate clustering identity, this can filter and separate paralogs derived from the same locus into separate orthologous sets across all samples, effectively generating additional loci for analysis when paralogs are present. 
 
-2. Phase bi-allelic variation from previously determined orthologs to build alignments from putative allelic haplotypes where each sample is represented by two sequences representing heterozygous or homozygous alleles.
+2. Phase bi-allelic variation from previously determined orthologs to build alignments from putative allelic haplotypes where each sample is represented by two sequences representing heterozygous or homozygous alleles. i.e. consensus allele sequences are phased into respective bi-allelic haplotypes for each presumably diploid sample.
 
-3. Infer hybrid haplotypes based on similarity to potential progenitor samples. This generates a multiple sequence alignment where hybrid samples can have two or more tips, depending on the number of hybrid haplotypes present in the sample. This was originally designed and probably works best for allopolyploid hybrids where we expect lower levels of inter-homeologous recombination, but we have had some success in detecting hybrid haplotypes from putative homoploid hybrids.
+3. Infer hybrid haplotypes based on similarity to potential progenitor samples. This generates a multiple sequence alignment where hybrid samples can have two or more tips, depending on the number of hybrid haplotypes present in the sample. This was originally designed and probably works best for allopolyploid hybrids where we expect lower levels of inter-homeologous recombination, but we have had success inusing the pipeline for detecting hybrid haplotypes from putative homoploid hybrids.
 
 Contact:jonasmrgrad@gmail.com
 
@@ -185,14 +185,10 @@ FLAGS:
 -indel indels have to be present in atleast XX% of sequences to be kept; trimal -gt option
 
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
-
-	1.idformat full = >L100_cl0_@@##_sampleid_0 ; Keeps full annotation. If last annotation > 0, it signifies samples with multiple consensus alleles per locus-cluster; potential heterozygotes, discontinouos haplotype fragments or unclustered paralogs, may consider higher-c2 (among samples) or -c1 (within samples) clustering values.
-	
-	2.idformat copies = >@@##_sampleid_0 ; Keeps sample id and consensus allele copy count per cluster. i.e. if last annotation >0 signifies samples with multiple consensus alleles per locus-cluster; see above
-	
-	3.idformat onlysample = >@@##_sampleid ; Keeps only the sample id across locus-cluster alignments, easiest for concatenation across all locus-cluster alignments
-	
-	4.idformat * = if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_WA10_sampleid_0 1230 bp
+	-idformat full = >L100_cl0_@@##_sampleid_0 ; Keeps full annotation. If last annotation > 0, it signifies samples with multiple consensus alleles per locus-cluster; potential heterozygotes, discontinouos haplotype fragments or unclustered paralogs, may consider higher-c2 (among samples) or -c1 (within samples) clustering values.
+	-idformat copies = >@@##_sampleid_0 ; Keeps sample id and consensus allele copy count per cluster. i.e. if last annotation >0 signifies samples with multiple consensus alleles per locus-cluster; see above
+	-idformat onlysample = >@@##_sampleid ; Keeps only the sample id across locus-cluster alignments, easiest for concatenation across all locus-cluster alignments
+	-idformat * = if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_WA10_sampleid_0 1230 bp
 
 
 COMMAND LINE EXAMPLE:
