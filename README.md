@@ -70,7 +70,7 @@ seqclean.py
 
 ## General Definition of Stages and Output:
 
-#### Stage1A.py
+### Stage1A.py
 
 The first script trims raw reads (trimgalore) and builds contigs (SPADES) for each sample, making folders for each sample and related files to be used downstream.
 
