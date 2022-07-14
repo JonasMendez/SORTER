@@ -26,26 +26,19 @@ import glob
 
 # Contact:jonasmrgrad@gmail.com
 
-# BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
-# 1. MAKE A FOLDER TO SERVE AS THE WORKING DIRECTORY (this will be the -wd FOR ALL PIPELINE SCRIPTS)
-# 2. ADD RAW PAIR-END FASTQ READS FOR EACH SAMPLE IN WORKING DIRECTORY, FOLLOWING THIS NAMING SCHEME FOR PAIRED END READS, RESPECTIVELY:
-# 	@@##_species1id_R1.fastq and @@##_species1id_R2.fastq
-# 	Make sure paired end reads are signified with R1/R2 as shown above
-# 	@@ values can be any set of alphabetic letters and or numbers
-# 	These Unique Identifiers are used to differentiate multiple samples of the same species (i.e. if multiple samples have the same 'species1id')
-# 3. WITHIN WORKING DIRECTORY MAKE THE FOLLOWING FOLDERS:
+# 1. WITHIN WORKING DIRECTORY (i.e. the 'cleanfastq' folder) MAKE THE FOLLOWING FOLDERS:
 # 	workingdirectory/diploids (this folder outputs Phase1 alignments)
 # 	workingdirectory/diploidclusters (This folder serves as a reference for Phase 3 allopolyploid/hybrid BLAST steps)
 # 	workingdirectory/diploids_phased (if phasing with Phase2.py, this folder outputs Phase2 Phased alignments for diploids. Can be used for Phase 3. 
 # 		***YOU WILL STILL HAVE TO RUN Phase2.phy with -cdbonly T if you wish to use Phase3.py to phase allopolyploids/hybrids without phasing in Phase2.phy)
 # 	workingdirectory/phaseset (if using Phase3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
-# 4. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
+# 2. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
 # 	workingdirectory/getlongestcontig.py
 # 	workingdirectory/deinterleave.py
 # 	workingdirectory/seqclean.py
 # 	workingdirectory/annotatedupes
 # 	workingdirectory/keeplongest.py
-# 5. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/
+# 3. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/
 # 		REFERENCE FILES MAY HAVE ALTERNATIVE FORMATING, BUT TARGET GENES MUST BE THE BEGINNING OF THE STRING (after '>') FORMATTED AS L#_ WITH L1_ - LN_ (N=number of target reference loci) 
 # 		AS FOLLOWS:
 # 		>L1_*
@@ -57,7 +50,7 @@ import glob
 # 		...
 # 		>L200_*
 # 		etc... (*'s representing any other ID format present in your reference; The pipeline ignores this information and is just interested in identifying genes from references)
-# 6. Before running script make sure to load all required software and python version
+# 4. Before running script make sure to load all required software and python version
 
 
 
@@ -68,9 +61,7 @@ import glob
 # -loci NUMBER OF REFERENCE LOCI
 # -c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .97 - .99 Recommended, INPUT AS DECIMAL) 
 # -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .65 - .80 Recommended***, INPUT AS DECIMAL. ***depends on taxonomic breadth of ingroup/outgroups;sensitivity analysis at different thresholds should be anlayzed for optimal clustering) 
-# -trim RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
-# -spades RUN SPADES ASSEMBLY? (T/F)***
-# -onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING; RUN AGAIN WITH -trim and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
+
 # -reclust (T/F) IF T ONLY RERUNs LOCUS CLUSTERING (SKIPS SPADES/TRIMGALORE AND SAMPLE ANNOTATIONS BY DEFAULT). CLEARS PREVIOUS LOCUS-CLUSTER OUTPUT, BACK UP IF NEEDED TO COMPARE CLUSTERING THRESHOLDS.
 # 	RUNNING THIS STEP IGNORES -c1, -cs -csl, -csn VALUES, USING VALUES FROM PREVIOUS RUN; TO CHANGE THESE FLAGS YOU MUST RERUN Phase1.py WITH -reclust F  spades F -trimgalore F -op F
 # -cs TAKE SPADES CONTIGS or SCAFFOLDS? (input as: scaffold or contig)
@@ -86,26 +77,13 @@ import glob
 
 
 
-# ***Make 'F' if you have already RUN TRIMGALORE or SPADES for your paired end reads
-# ***If you have already run trimgalore, and want this script to run SPADES assembly, you must organize your working directory
-# so that each set of trimmed reads has the naming scheme W@@##_species1_R1_val_1.fq and W@@##_species1_R2_val_2.fq
-# Each set of trimmed .fq files is in their own folder corresponding to each sample, with each sample folder named as follows:
-# 	/workingdirectory/WA01_species1_R1.fastq
-# 	/workingdirectory/WA02_species2_R1.fastq
-# 	/workingdirectory/WB03_species3_R1.fastq
-# 	etc...
-# folders have ..._R1.fastq extensions as unique identifiers for the script.
-
 # TYPICAL COMMAND LINE
-# python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -op F -spades T -trimgalore T -op F -reclust F -loci 450 -c1 .85 -c2 .60 -cs contig -csn 8 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
+# python phase1.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -reclust F -loci 450 -c1 .85 -c2 .60 -cs contig -csn 8 -csl 350 -al 1000 -indel 0.25 -idformat onlysample
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-wd", "--workingdir")
 parser.add_argument("-c1", "--clust1id")
 parser.add_argument("-c2", "--clust2id")
-parser.add_argument("-spades", "--spadesassembly")
-parser.add_argument("-trimgalore", "--trimgalore")
-parser.add_argument("-op", "--onlyprocess")
 parser.add_argument("-reclust", "--recluster")
 parser.add_argument("-loci", "--locinum")
 parser.add_argument("-cs", "--contigscaf")
@@ -133,7 +111,7 @@ def replaceAll(file,searchExp,replaceExp):
         sys.stdout.write(line)
 
 
-print('SORTED Phase 1 will run with the following settings:'+ '\n' + 'Working Directory= ' + args.workingdir + '\n' + 'Only Run Trimgalore/Spades?= '+ args.onlyprocess + '\n'  +'Trim Raw Reads?= ' + args.trimgalore + '\n' 'Spades Assembly? =' + args.spadesassembly + '\n' + 'Only doing reclustering step?=' + args.recluster + '\n' +'Use Spades contigs or scaffolds?=' + args.contigscaf + '\n' + 'Max Number of contigs/scaffolds per locus to use for consensus alleles = ' + args.contigscafnum + '\n' + ' Max length of contig/scaffolds retrieved = ' + args.contigscaflen + '\n' + 'Consensus Alleles (Within Samples) Clustering ID = ' + args.clust1id + '\n' +'Locus-Cluster (Among Samples) Clustering ID = ' + args.clust2id + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep )
+print('SORTED Phase 1 will run with the following settings:'+ '\n' + 'Working Directory= ' + args.workingdir + '\n' + 'Only doing reclustering step?=' + args.recluster + '\n' +'Use Spades contigs or scaffolds?=' + args.contigscaf + '\n' + 'Max Number of contigs/scaffolds per locus to use for consensus alleles = ' + args.contigscafnum + '\n' + ' Max length of contig/scaffolds retrieved = ' + args.contigscaflen + '\n' + 'Consensus Alleles (Within Samples) Clustering ID = ' + args.clust1id + '\n' +'Locus-Cluster (Among Samples) Clustering ID = ' + args.clust2id + '\n' + 'MAFFT Alignment Iterations = ' + args.aliter + '\n' + 'Keep Indels when present in .X of Samples, X = ' + args.indelrep )
 
 
 if args.recluster is 'T':
@@ -437,61 +415,6 @@ if args.recluster is 'T':
 			else:
 				sys.exit("-idformat flag not set or did not correspond to 'full', 'copies', or 'onlysample' keeping default trimal headers; e.g. >L100_cl0_WA10_sampleid_0 1230 bp ")
 
-#Secondary script for running trim galore or spades assembly
-elif args.trimgalore is 'T':
-	os.chdir(args.workingdir)
-	dst = args.workingdir + 'cleanfastq/'
-	directiter = iter(sorted(direc))
-
-	for file in directiter:
-		if 'R1' in file:
-			readst= dst + file + '/'
-			os.makedirs(os.path.join(readst))
-			print(readst)
-			old_path = os.path.join(args.workingdir, file)
-			new_path = os.path.join(readst + file)
-			os.renames(old_path, new_path)
-			nextread = next(directiter)
-			print(nextread)
-			read2path = args.workingdir + nextread
-			newread2path = readst + nextread
-			move(read2path, newread2path)
-			os.chdir(readst)
-			subprocess.call(["trim_galore --quality 20 --length 30 --paired --fastqc %s %s" % (file, nextread)], shell=True)
-			os.remove(file)
-			os.remove(nextread)
-			os.chdir(args.workingdir)
-		else:
-			continue
-
-	#Assemble Contigs if needed
-
-elif args.spadesassembly is 'T':
-
-#Assemble diploid contigs with spades
-
-	for file in os.listdir(args.workingdir):
-		if 'R1' in file:
-			print(file)
-			os.chdir(args.workingdir + file)
-			cdir=args.workingdir + file
-			print(cdir)
-			for read in os.listdir(cdir):
-				if 'R1_val_1.fq' in read:
-					R2 = read[:-11] + 'R2_val_2.fq'
-					subprocess.call(["spades.py --only-assembler -1 %s -2 %s -o spades_hybrid_assembly" % (read, R2)], shell=True)
-					os.chdir(args.workingdir)
-				else:
-					continue
-		else:
-			continue
-
-
-os.chdir(args.workingdir)
-
-
-if args.onlyprocess is 'T':
-		sys.exit("--onlyprocess = T, Trimgalore and or SPADES processing has finished, exiting script")
 else:
 
 	print('Preparing Directories For contig assembly and ortholog clustering...')
@@ -504,7 +427,9 @@ else:
 				if not 'spades_hybrid_assembly' in file:
 					if not '_val_' in file:
 						if not 'trimming_report' in file:
-							os.remove(dirpath + file)		
+							os.remove(dirpath + file)
+						else:
+							continue
 
 	os.chdir(args.workingdir)
 
@@ -597,31 +522,16 @@ else:
 			subprocess.call(["pwd"], shell=True)
 			for file in readir:
 				if file.endswith("_"):
-	   				subprocess.call(["python %s -i %s -n %s > %slongest.fa" % (longestcontig, file, args.contigscafnum, file)], shell=True)	
-	   				#Remove sequences shorter than user defined length
+					subprocess.call(["python %s -i %s -n %s > %slongest.fa" % (longestcontig, file, args.contigscafnum, file)], shell=True)	
+					#Remove sequences shorter than user defined length
 					subprocess.call(["seqtk seq -L %s %slongest.fa > %slongestfiltered.fa" % (args.contigscaflen, file, file)], shell=True )
 
 	os.chdir(args.workingdir)
 
-	print('Retrieve '+args.contigscaf+' that were less than '+ args.contigscaflen+', if those were the longest '+args.contigscaf+'s for the locus')
-	#Retrieve contigs that were less than the user defined limit, if those were the longest contigs. This is done to improve coverage needed for analyses (i.e. MSC via STACEY or *BEAST) requiring full sample representation 
-	for folder in direc:
-		if 'fastq' in folder:
-			os.chdir(args.workingdir + folder)
-			readir = os.listdir(args.workingdir + folder)
-			for file in readir:
-				if file.endswith('longestfiltered.fa'):
-					if os.path.getsize(file) == 0:
-						os.remove(file)
-						src =args.workingdir + folder + '/' + file[:-18] + 'longest.fa'
-						#print(src)
-						dst =args.workingdir + folder + '/' + file
-						#print(dst)
-						os.rename(src, dst)
-						#print(file)
-
 	print('Clustering ' + args.contigscaf +'s ' + 'into Consensus Alleles at' + args.clust1id + ' Identity Threshold')
+
 	#cluster contigs
+
 	for folder in direc:
 		if 'R1' in folder:
 			print(folder)
@@ -767,7 +677,7 @@ else:
 		if folder.endswith('_'):
 			for bait in DICT.keys(): 
 				DICT[bait][folder]=[]
-	
+
 
 	print(DICT)
 
@@ -902,7 +812,7 @@ else:
 		if folder.endswith('_'):
 			for baitcluster in DICT2.keys(): 
 				DICT2[baitcluster][folder]=[]
-	
+
 
 	os.chdir(diploidclusters)
 
@@ -1001,9 +911,12 @@ else:
 
 
 
-# You can concatenate trimmed clustered-loci labelled deintereleaved_...._trimmed for diploid phylogeny,
+# You can concatenate trimmed clustered-loci labelled deintereleaved_...._trimmed in the 'diploids' folder for maximum likelihood phylogeny (i.e. raxml, iqtree),
 #resulting MSA's may have more than one sequence per sample and could be due to:
-#heterozygous variants were retained and not collapsed into consensus alleles, check clustering id for -c1, may want to set higher
+#retention of paralogous sequences, may want to set a higher -c2 identity, atleast 75% recommended.
+#heterozygous variants were retained and not collapsed into consensus alleles, check clustering id for -c1, .99 recommended
 #In our assessment multiple contigs is usually the result of two locus fragments that were not contiguous and unable to be joined in the consensus allele clustering step
-#we leave the decision up to the user as to how to manage extra contig/scaffold sequences present in locus clusters.
-#Our post-pipeline processing approach simply takes the longest sequence variant when compiling data with SequenceMatrix software
+#The purpose of this stage is to reduce multi-copy sequences due to paralogy by identity clustering among samples for the same reference locus.
+#However, some datasets based on a variety of rich to poor DNA inputs, may have significantly higher multi-copy sequences at a given locus
+# due to unjoined fragmented amplicons of the same locus which is common with poor sample DNA quality.
+#we leave the decision up to the user as to how to manage extra contig/scaffold sequences present in locus clusters.(e.g. choose the longest sequence)
