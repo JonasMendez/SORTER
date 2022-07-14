@@ -114,13 +114,13 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 
 3. MAKE THE FOLLOWING FOLDERS:
 
-	workingdirectory/cleanfastq/diploids (this folder outputs Phase1 alignments)
+	workingdirectory/cleanfastq/diploids (this folder outputs Stage1B.py alignments)
 	
 	workingdirectory/cleanfastq/diploidclusters (un-aligned clustered loci are stored here)
 	
-	workingdirectory/cleanfastq/diploids_phased (if phasing with Phase2.py, this folder outputs Phase2 Phased alignments for diploids.)
+	workingdirectory/cleanfastq/diploids_phased (if phasing with Stage2.py, this folder outputs phased alignments.)
 	
-	workingdirectory/phaseset (if using Phase3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
+	workingdirectory/phaseset (if using Stage3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
 	
 
 4. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
