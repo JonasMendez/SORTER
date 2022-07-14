@@ -185,9 +185,13 @@ FLAGS:
 -indel indels have to be present in atleast XX% of sequences to be kept; trimal -gt option
 
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
+
 	-idformat full = >L100_cl0_@@##_sampleid_0 ; Keeps full annotation. If last annotation > 0, it signifies samples with multiple consensus alleles per locus-cluster; potential heterozygotes, discontinouos haplotype fragments or unclustered paralogs, may consider higher-c2 (among samples) or -c1 (within samples) clustering values.
+	
 	-idformat copies = >@@##_sampleid_0 ; Keeps sample id and consensus allele copy count per cluster. i.e. if last annotation >0 signifies samples with multiple consensus alleles per locus-cluster; see above
+	
 	-idformat onlysample = >@@##_sampleid ; Keeps only the sample id across locus-cluster alignments, easiest for concatenation across all locus-cluster alignments
+	
 	-idformat * = if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_WA10_sampleid_0 1230 bp
 
 
@@ -214,15 +218,11 @@ FLAGS:
 
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL FASTA ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
 
-
 	-idformat full = >L100_cl0_@@##_sampleid_ph0/ph1_0 ; Keeps full anottation.  If last annotation > 1, it signifies samples with multiple consensus alleles per locus-cluster that were phased.
-	
 	
 	-idformat phase = >@@##_sampleid_ph0/ph1 ; RECOMMENDED FOR PHASING. Keeps sample id and phase annotations.
 	
-	
 	-idformat onlysample = >@@##_sampleid ; Keeps only the sample for sequence headers, removing phase annotation. You will have to decide how to manage phased or other sequence copies with identical id names.
-	
 	
 	-idformat * :if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_@@##_sampleid_0 1230 bp
 
