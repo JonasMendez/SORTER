@@ -214,13 +214,18 @@ FLAGS:
 
 -idformat (full/copies/onlysample/*) OUTPUTS FINAL FASTA ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
 
+
 	-idformat full = >L100_cl0_@@##_sampleid_ph0/ph1_0 ; Keeps full anottation.  If last annotation > 1, it signifies samples with multiple consensus alleles per locus-cluster that were phased.
+	
 	
 	-idformat phase = >@@##_sampleid_ph0/ph1 ; RECOMMENDED FOR PHASING. Keeps sample id and phase annotations.
 	
+	
 	-idformat onlysample = >@@##_sampleid ; Keeps only the sample for sequence headers, removing phase annotation. You will have to decide how to manage phased or other sequence copies with identical id names.
 	
+	
 	-idformat * :if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_@@##_sampleid_0 1230 bp
+
 
 -cdbonly (T/F) set to 'T' to only make blast database for phasing and blasting allopolyploid/hyrbid samples in Phase3.py. 
 	Use this setting if you wish to skip phasing your diploid locus-cluster samples but still want to process polyploids/hyrbids with Phase3.py
