@@ -23,28 +23,48 @@ Contact:jonasmrgrad@gmail.com
 ### Dependencies:
 
 Biopython (Python 2.7.x)
+
 Perl
+
 Trim Galore v 0.6.4 (with cutadapt v1.1B)
+
 bwa v 0.7.17-r1188
+
 SAMTools v 1.9 (using htslib 1.9)
+
 BCFTools v1.9 (using htslib 1.9)
+
 MAFFT v 7.450
+
 SPAdes v 3.11.1
+
 Seqtk v 1.3-r107-dirty
+
 Vcfutils.pl (from bcftools v 1.9)
+
 Trimal v 1.2rev59
+
 Usearch v 11.0.667_i86linux32
 
 
 ### Scripts:
+
 Stage1A.py
+
 Stage1B.py
+
 Stage2.py
+
 Stage3.py
+
 annotatedupes
+
 deinterleave.py
+
 getlongestcontig.py
+
 keeplongest.py
+
 seqclean.py
 
 
