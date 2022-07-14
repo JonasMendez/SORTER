@@ -171,11 +171,8 @@ FLAGS:
 -c2 2nd CLUSTER ID (AMONG SAMPLES FOR LOCUS-CLUSTERS, .70 - .90 recommended, may depend on taxonomic breadth of ingroup/outgroups.
 
 
--reclust (T/F) IF T, ONLY RERUNs LOCUS CLUSTERING + ALIGNMENT, WILL NOT REBUILD CONSENSUS ALLELES (i.e. keeps -cs, -csn, and -csl output from previous run). 
+-reclust (T/F) IF T, ONLY RERUNs LOCUS CLUSTERING + ALIGNMENT, WILL NOT REBUILD CONSENSUS ALLELES (i.e. keeps -cs, -csn, and -csl output from previous run, rerun with -reclust F if you wish to change these parameters). CLEARS PREVIOUS CLUSTERED LOCI, BACK UP OUTPUT IF NEEDED TO COMPARE CLUSTERING THRESHOLDS.
 
-CLEARS PREVIOUS CLUSTERED LOCI, BACK UP OUTPUT IF NEEDED TO COMPARE CLUSTERING THRESHOLDS.
-
-	RUNNING -reclust T IGNORES -c1 -cs -csl -csn VALUES, USING VALUES FROM PREVIOUS RUN; TO CHANGE THESE FLAGS YOU MUST RERUN Phase1.py WITH -reclust F
 
 -cs TAKE SPADES CONTIGS or SCAFFOLDS? (input as: scaffold or contig)
 
