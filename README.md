@@ -138,7 +138,7 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 
 3. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/cleanfastq/
 
-4. Locus references should be in FASTA format. Reference IDS may have any labels, but each unique reference must be annotated with "L#_..." at the begnning of the sequence ID (i.e. directly after the ">") to generate an index for all references to be used by the pipeline.
+4. Locus references should be in FASTA format. Reference IDs may have any labels, but each reference locus must be annotated with "L#_..." at the begnning of the sequence ID (i.e. directly after the ">") to generate an index for all reference loci to be used by the pipeline. Multiple references may be used for the same targeted locus, but they must be annotated with the same locus index number.
 
 AS FOLLOWS:
 		
