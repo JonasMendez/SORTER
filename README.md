@@ -112,7 +112,7 @@ BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
 
 Before running any more scripts, prepare the working directory (i.e. "cleanfastq" folder generated in Stage1A.py) with required files and folders.
 
-3. MAKE THE FOLLOWING FOLDERS:
+1. MAKE THE FOLLOWING FOLDERS:
 
 	workingdirectory/cleanfastq/diploids (this folder outputs Stage1B.py alignments)
 	
@@ -123,7 +123,7 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 	workingdirectory/cleanfastq/phaseset (if using Stage3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
 	
 
-4. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
+2. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
 
 	workingdirectory/getlongestcontig.py
 	
@@ -136,9 +136,9 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 	workingdirectory/keeplongest.py
 	
 
-5. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/cleanfastq/
+3. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/cleanfastq/
 
-6. Locus references should be in FASTA format. Reference IDS may have any labels, but each unique reference must be annotated with "L#_..." at the begnning of the sequence ID (i.e. directly after the ">") to generate an index for all references to be used by the pipeline.
+4. Locus references should be in FASTA format. Reference IDS may have any labels, but each unique reference must be annotated with "L#_..." at the begnning of the sequence ID (i.e. directly after the ">") to generate an index for all references to be used by the pipeline.
 
 AS FOLLOWS:
 		
@@ -154,7 +154,7 @@ AS FOLLOWS:
 		
 (*'s representing any other ID format present in your reference; The pipeline ignores this information and is just interested in identifying the index number from references)
 
-7. Before running any script make sure to load all required software and python version
+5. Before running any script make sure to load all required software and python version
 
 
 FLAGS:
