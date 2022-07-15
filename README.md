@@ -269,7 +269,11 @@ Output files:
 
 Hybrids are labeled as: @@##_sampleid_diploidhit_phase(0/1)
 
-Where diploid hit is the name of the most similar progenitor and phase matches the bi-allelic haplotype phases for each locus. 
+Where diploid hit is the name of the most similar progenitor and phase matches the bi-allelic haplotype phases for each locus.
+
+Command line example:
+
+python Stage3.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -c1 .99 -cs contig -csn 20 -csl 300 -pq 20 -al 1000 -indel 0.20
 
 #### Note on using pipeline for homoploid hybrids:
 
@@ -278,6 +282,4 @@ This approach may not be appropriate for homoploid hybrids where phased bi-allel
 In the case of allopolyploids we would expect most loci to be "chimeric" or have all progenitors represented at most loci; thus a conservative filter is to only analyze loci with all (or most) progenitors represented. Latter coverage may be more limited at higher ploidy levels, but atleast having two progenitors represented per locus is probably more appropriate, as loci with only a single progenitor represented may be due to the pipeline not being able to differentiate homeologous sequences.
 
 
-COMMAND LINE EXAMPLE:
 
-python Stage3.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -c1 .99 -cs contig -csn 20 -csl 300 -pq 20 -al 1000 -indel 0.20
