@@ -206,7 +206,7 @@ Stage2.py takes the dataset generated in Stage1B.py, maps reads to consensus all
 
 *** MAKE SURE YOU HAVE MADE THE /workingdirectory/cleanfastq/diploids_phased/ DIRECTORY BEFORE RUNNING.
 
-FLAGS:
+Flags:
 
 -wd WORKING DIRECTORY : -wd /workingdirectory/cleanfastq/ (DIRECTORY PATH STRING MUST START AND END IN '/') should be the same directory used in Stage1B.py
 
@@ -216,7 +216,7 @@ FLAGS:
 
 -indel indels have to be present in atleast XX% of sequences to be kept
 
--idformat (full/copies/onlysample/*) OUTPUTS FINAL FASTA ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
+-idformat (full/phase/onlysample/*) OUTPUTS FINAL FASTA ALIGNMENT SEQUENCE IDS IN FOLLOWING FORMATS:
 
 	-idformat full = >L100_cl0_@@##_sampleid_ph0/ph1_0 ; Keeps full anottation.  If last annotation > 1, it signifies samples with multiple consensus alleles per locus-cluster that were phased.
 	
