@@ -239,7 +239,7 @@ This stage assumes samples processed through stages 1 - 2 are possible progenito
 
 #### Preparing hybrid samples and running Stage3.py
 
-If you have not already done so, run stages 1 - 2 on the progenitor samples you wish to use to compare hybrids to, excluding any other hybrid samples or potentially mis-identified samples (or you can fix the label for mis-identified samples by renaming their fastq files and sample folder name to the appropriate label, and re-run stages 1 - 2 so that the dataset has the correct taxon labels). If you have not already done so, process the hybrid samples you want to test using Stage1A.py first to trim reads and build contigs in a separate folder. You can then move the output sample folders into the "phaseset" folder associated with the progenitor samples you previously generated.
+If you have not already done so, run stages 1 - 2 on the progenitor samples you wish to use to compare hybrids to, excluding any other hybrid samples or potentially mis-identified samples (or you can fix the label for mis-identified samples by renaming their fastq files and sample folder name to the appropriate label, and re-run stages 1 - 2 so that the dataset has the correct taxon labels). If you have not already done so, process the hybrid samples you want to test using Stage1A.py first to trim reads and build contigs in a separate folder. You can then move the output hybrid sample folders into the "phaseset" folder associated with the "cleanfastq" directory containing progenitor samples you previously clustered and phased with stages 1 and 2.
 
 Flags:
 
