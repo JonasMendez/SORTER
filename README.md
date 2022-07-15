@@ -231,82 +231,44 @@ Command line example:
 python Stage2.py -wd /working/directory/ -pq 20 -al 1000 -indel .25 -idformat phase
 
 
-### Phase3.py
+### Stage3.py
 
+This stage assumes samples processed through stages 1 - 2 are possible progenitor taxa contributing to putative hybrid samples. Specifically, phased allopolyploid sequences are UBLASTED (usearch) to phased progenitor sequences from Stage2.py in order to assess potential hybrid parentage. For best performance, a broad or informed sampling of possible progenitors as well as verified identifications of taxa and hybrids are critical. Mis-identified taxa or cryptic hybrids can confound results by giving the wrong signal associated with an erroneous taxon label, thus hybrid haplotypes might be associated with the wrong lineage and or erroneously over-represented in others causing mixed hybrid sequence sets. To improve inference, the pipeline automatically filters sequences with >50% missing data.
 
-BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
+#### Preparing hybrid samples and running Stage3.py
 
-1. MAKE A FOLDER TO SERVE AS THE WORKING DIRECTORY FOR THE SET OF ALLOPOLYPLOIDS OR HYBRIDS TO BE PHASED AS /workingdirectory/phaseset/
+If you have not already done so, run stages 1 - 2 on the progenitor samples you wish to use to compare hybrids to, excluding any other hybrid samples or potentially mis-identified samples (or you can fix the label by renaming the fastq files and sample folder name to the appropriate label, and re-run stages 1 - 2 so that the dataset has the correct taxon labels). Process the hybrid samples you wish to process using Stage1A.py first to trim reads and build contigs in a separate folder, you can then move the output sample folders into the "phaseset" folder associated with the progenitor samples you previously generated. 
 
-2. ADD RAW PAIR-END FASTQ READS FOR EACH SAMPLE IN PHASESET WORKING DIRECTORY, FOLLOWING THIS NAMING SCHEME FOR PAIRED END READS, RESPECTIVELY(SAME AS Phase1.py):
-
-	@@##_species1id_R1.fastq and @@##_species1id_R2.fastq
-	
-	Make sure paired end reads are signified with R1/R2 as shown above
-	
-	@@ values can be any set of two alphabetic letters and ## can be any unique set of two intergers per sample, MUST BE IDENTICAL FOR THE SAME SAMPLE
-	
-	These Unique Identifiers are used to differentiate multiple samples of with the same species id (i.e. if multiple samples have the same 'species1id')
-	
-4. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY (Same as Phase1.py):
-
-	workingdirectory/getlongestcontig.py
-	
-	workingdirectory/deinterleave.py
-	
-	workingdirectory/seqclean.py
-	
-	workingdirectory/annotatedupes
-	
-	workingdirectory/keeplongest.py
-	
-5. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/
-
-6. Before running script make sure to load all required software and python version 
-
-FLAGS
+Flags:
 
 -wd WORKING DIRECTORY 
 
--ref PROBE REFERENCE DIRECTORY (FASTA FILE) SAME AS Phase1.py
+-ref PROBE REFERENCE DIRECTORY (FASTA FILE) SAME AS Stage1B.py
 
--loci NUMBER OF REFERENCE LOCI SAME AS Phase1.py
+-loci NUMBER OF REFERENCE LOCI SAME AS Stage1B.py
 
--c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES, .99 Recommended) 
-
--trimgalore RUN TRIMGALORE TO TRIM RAW READS? (T/F)***
-
--spades RUN SPADES ASSEMBLY? (T/F)***
-
--onlyprocess (T/F) ONLY RUN TRIMGALORE AND SPADES FOR CONTIG PROCESSING?; RUN AGAIN WITH -trimgalore and -spades as F FOR PIPELINE (set as F if running processing + pipeline in one run)
+-c1 1st CLUSTER ID (WITHIN SAMPLE FOR CONSENSUS ALLELES,  0.98 - .99 Recommended) 
 
 -cs TAKE SPADES CONTIGS or SCAFFOLDS? (MUST INPUT AS: scaffold or contig)
 
--csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES. DEPENDING ON SUSPECTED PLOIDY, MULTIPLY BY 2 TO ACCOUNT FOR HETEROZYGOUS VARIANTS (i.e. tetraploid 4*2=8, triploid 3*2=6. 8-10 for unknown samples is recommended)
+-csn TAKE N CONTIGS/SCAFFOLDS PER LOCUS PER SAMPLE FOR CONSENSUS ALLELES. DEPENDING ON SUSPECTED PLOIDY, MULTIPLY BY 2 TO ACCOUNT FOR HETEROZYGOUS VARIANTS (i.e. tetraploid 4*2=8, triploid 3*2=6. A high number like 20-30 may help for allopolyploids if paralogs are prevalent in dataset)
 
 -csl ONLY TAKE CONTIGS/SCAFFOLDS LARGER THAN N LENGTH
 
 -pq PHASE QUALITY; SAMTOOLS -Q FLAG; MINIMUM READS TO CALL A PHASE (atleast 20 recommended)
 
--n PERCENT OF MISSING DATA (N) ALLOWED IN PHASED SEQUENCES? (atleast 50% bp representation recommended, input as -n 50 , NOT AS DECIMAL)
-
 -al number of iterations for MAFFT alignments (1000 recommended)
 
--indel indels have to be present in atleast XX% of sequences to be kept; 0.25 recommended for ~50 samples (INPUT AS DECIMAL)
+-indel indels have to be present in atleast XX% of sequences to be kept (INPUT AS DECIMAL)
 
 
 Output Files:
 
-/workingdir/phaseset/sample/diploidclusters/*_phase.fasta extension making polyploid/hybrid sample ids in the following format :
+/workingdir/phaseset/diploidclusters/*_diploidhit.fasta extension making polyploid/hybrid sample ids in the following format :
 
->@@##_sampleid_phase(0/1)
+@@##_sampleid_diploidhit_phase(0/1)
 
-/workingdir/phaseset/sample/diploidclusters/*_diploidhit.fasta extension making polyploid/hybrid sample ids in the following format :
-
->@@##_sampleid_diploidhit
-
-the *_trimmed.fasta files are annotated as @@##_sampleid_diploidhit_phase(0/1)
 
 COMMAND LINE EXAMPLE:
 
-python Phase3.py -wd /workingdirectory/ -ref /workingdirectory/references.fasta -loci 450 -spades T -trimgalore T -op F -c1 .90 -cs contig -csn 8 -csl 350 -pq 20 -n 50 -al 1000 -indel 0.25
+python Stage3.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -c1 .90 -cs contig -csn 20 -csl 300 -pq 20 -al 1000 -indel 0.20
