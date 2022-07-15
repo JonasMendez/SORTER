@@ -262,7 +262,7 @@ Flags:
 -indel indels have to be present in atleast XX% of sequences to be kept (INPUT AS DECIMAL)
 
 
-Output files:
+Output alignment files stored in:
 
 /workingdir/phaseset/diploidclusters/
 
