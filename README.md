@@ -112,7 +112,7 @@ BEFORE RUNNING MAKE SURE YOU HAVE DONE THE FOLLOWING:
 
 Before running any more scripts, prepare the working directory (i.e. "cleanfastq" folder generated in Stage1A.py) with required files and folders.
 
-1. MAKE THE FOLLOWING FOLDERS:
+1. CREATE THE FOLLOWING FOLDERS:
 
 	workingdirectory/cleanfastq/diploids (this folder outputs Stage1B.py alignments)
 	
@@ -125,15 +125,15 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 
 2. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
 
-	workingdirectory/getlongestcontig.py
+	workingdirectory/cleanfastq/getlongestcontig.py
 	
-	workingdirectory/deinterleave.py
+	workingdirectory/cleanfastq/deinterleave.py
 	
-	workingdirectory/seqclean.py
+	workingdirectory/cleanfastq/seqclean.py
 	
-	workingdirectory/annotatedupes
+	workingdirectory/cleanfastq/annotatedupes
 	
-	workingdirectory/keeplongest.py
+	workingdirectory/cleanfastq/keeplongest.py
 	
 
 3. Know the working directory of your probe references for command line input, may be placed in /workingdirectory/cleanfastq/
@@ -157,11 +157,11 @@ AS FOLLOWS:
 5. Before running any script make sure to load all required software and python version
 
 
-FLAGS:
+Flags:
 
 -wd WORKING DIRECTORY : -wd /workingdirectory/cleanfastq/ (DIRECTORY PATH STRING MUST START AND END IN '/')
 
--ref PROBE REFERENCE DIRECTORY (FASTA FILE): -ref /path/to/ref.fasta
+-ref  PATH TO REFERENCE (FASTA FILE): -ref /path/to/ref.fasta
 
 
 -loci NUMBER OF REFERENCE LOCI (e.g. -loci 550)
@@ -195,16 +195,16 @@ FLAGS:
 	-idformat * = if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_WA10_sampleid_0 1230 bp
 
 
-COMMAND LINE EXAMPLE:
+Command line example:
 
 python Stage1B.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -reclust F -c1 .99 -c2 .80 -cs contig -csn 10 -csl 300 -al 1000 -indel 0.25 -idformat onlysample
 
 
 ### Stage2.py
 
-Stage2.py takes the dataset generated in Stage1B.py, maps reads to consensus alleles in order to phase haplotypes using samtools phase. The phased clustered loci are then re-aligned for analysis.
+Stage2.py takes the dataset generated in Stage1B.py, maps reads to consensus alleles in order to phase haplotypes using samtools phase, resulting in two haplotype bi-allelic sequences per sample, assuming all samples are diploid. The phased clustered loci are then re-aligned for analysis and output in the 'diploids_phased' folder.
 
-*** MAKE SURE YOU HAVE MADE THE /workingdirectory/diploids_phased/ DIRECTORY BEFORE RUNNING.
+*** MAKE SURE YOU HAVE MADE THE /workingdirectory/cleanfastq/diploids_phased/ DIRECTORY BEFORE RUNNING.
 
 FLAGS:
 
@@ -226,13 +226,9 @@ FLAGS:
 	
 	-idformat * :if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_@@##_sampleid_0 1230 bp
 
+Command line example:
 
--cdbonly (T/F) set to 'T' to only make blast database for phasing and blasting allopolyploid/hyrbid samples in Phase3.py. 
-	Use this setting if you wish to skip phasing your diploid locus-cluster samples but still want to process polyploids/hyrbids with Phase3.py
-
-COMMAND LINE EXAMPLE
-
-python Phase2.py -wd /working/directory/ -pq 20 -al 1000 -indel .25 -idformat phase -cdbonly F
+python Stage2.py -wd /working/directory/ -pq 20 -al 1000 -indel .25 -idformat phase
 
 
 ### Phase3.py
