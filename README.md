@@ -72,7 +72,7 @@ seqclean.py
 
 ### Stage1A.py
 
-The first script trims raw reads (trimgalore) and builds contigs (SPADES) for each sample, making folders for each sample and related files to be used downstream.
+The first script trims raw reads (trimgalore) and builds contigs (SPADES) for each sample, making folders for each sample to be used downstream.
 
 ### Stage1B.py
 
