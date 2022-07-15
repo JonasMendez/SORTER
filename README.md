@@ -262,11 +262,18 @@ Flags:
 -indel indels have to be present in atleast XX% of sequences to be kept (INPUT AS DECIMAL)
 
 
-Output Files:
+Output files:
 
-/workingdir/phaseset/diploidclusters/*_diploidhit.fasta extension making polyploid/hybrid sample ids in the following format :
+/workingdir/phaseset/diploidclusters/
 
-@@##_sampleid_diploidhit_phase(0/1)
+
+Hybrids are labeled as: @@##_sampleid_diploidhit_phase(0/1)
+
+Where diploid hit is the name of the most similar progenitor and phase matches the bi-allelic haplotype phases for each locus. 
+
+This approach may not be appropriate for homoploid hybrids where phased bi-allelic haplotypes are representative of alternative progenitor genomes, as opposed to allopolyploids that retain the full bi-allelic variation associated with each progenitor. Assuming homoploidy, some phased haplotypes may just represent a single haploid sequence if the locus is "chimeric:, or represented by atleast two progenitors. If this is the case one could just scaffold the phases or choose the longest phase as the representative sequence. However, if most loci are not chimeric and simply associated with one progenitor or the other, the latter work-around might lose informative sites for inference and it may be better to retain phased haplotypes while assuming phased haplotypes in chimeric loci (i.e. loci in which two progenitor sequences are present) result in identical homozygous haplotypes due to actually representing a single haploid sequence.
+
+In the case of allopolyploids we would expect most loci to be "chimeric" or have all progenitors represented at most loci; thus a conservative filter is to only analyze loci with all (or most) progenitors represented. Latter coverage may be more limited at higher ploidy levels, but atleast having two progenitors represented per locus is probably more appropriate, as loci with only a single progenitor represented may be due to the pipeline not being able to differentiate homeologous sequences.
 
 
 COMMAND LINE EXAMPLE:
