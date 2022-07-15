@@ -237,7 +237,7 @@ This stage assumes samples processed through stages 1 - 2 are possible progenito
 
 #### Preparing hybrid samples and running Stage3.py
 
-If you have not already done so, run stages 1 - 2 on the progenitor samples you wish to use to compare hybrids to, excluding any other hybrid samples or potentially mis-identified samples (or you can fix the label by renaming the fastq files and sample folder name to the appropriate label, and re-run stages 1 - 2 so that the dataset has the correct taxon labels). Process the hybrid samples you wish to process using Stage1A.py first to trim reads and build contigs in a separate folder, you can then move the output sample folders into the "phaseset" folder associated with the progenitor samples you previously generated. 
+If you have not already done so, run stages 1 - 2 on the progenitor samples you wish to use to compare hybrids to, excluding any other hybrid samples or potentially mis-identified samples (or you can fix the label for mis-identified samples by renaming their fastq files and sample folder name to the appropriate label, and re-run stages 1 - 2 so that the dataset has the correct taxon labels). If you have not already done so, process the hybrid samples you want to test using Stage1A.py first to trim reads and build contigs in a separate folder. You can then move the output sample folders into the "phaseset" folder associated with the progenitor samples you previously generated.
 
 Flags:
 
@@ -271,4 +271,4 @@ Output Files:
 
 COMMAND LINE EXAMPLE:
 
-python Stage3.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -c1 .90 -cs contig -csn 20 -csl 300 -pq 20 -al 1000 -indel 0.20
+python Stage3.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -c1 .99 -cs contig -csn 20 -csl 300 -pq 20 -al 1000 -indel 0.20
