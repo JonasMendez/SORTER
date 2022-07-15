@@ -123,7 +123,7 @@ Before running any more scripts, prepare the working directory (i.e. "cleanfastq
 	workingdirectory/cleanfastq/phaseset (if using Stage3.py, this folder will contain hybrid/allopolyploid sample files and alignments)
 	
 
-2. PLACE ALL EXTERNAL PYTHON SCRIPTS IN WORKING DIRECTORY:
+2. PLACE ALL EXTERNAL SCRIPTS IN WORKING DIRECTORY:
 
 	workingdirectory/cleanfastq/getlongestcontig.py
 	
