@@ -39,9 +39,6 @@ import glob
 # 	-idformat * :if you mispell the above arguments or leave -id format blank, it will keep the default trimal headers; e.g. >L100_cl0_@@##_sampleid_0 1230 bp
 
 
-# COMMAND LINE EXAMPLE
-# python Phase2.py -wd /working/directory/ -pq 20 -al 1000 -indel .25 -idformat phase
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-wd", "--workingdir")
 parser.add_argument("-pq", "--phasequal")
