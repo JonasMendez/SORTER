@@ -266,7 +266,7 @@ if args.recluster is 'T':
 	   								print(line)
 	   								linspl=line.split('_')
 	   								print(linspl)
-	   								name = line[:-100] + linspl[0] + '_' + cid + linspl[1] + '_' + linspl[2] + '_'+ linspl[3]
+	   								name = linspl[0] + '_' + cid + linspl[1] + '_' + linspl[2] + '_'+ linspl[3]
 	   								print(name)
 	   								replaceAll(file, line, name)
 
@@ -379,7 +379,7 @@ if args.recluster is 'T':
 							linspl=line.split(' ')[0]
 							linspl2=linspl.split('_')
 							print(linspl2)
-							name = line[:-1000] + linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
+							name = linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
 							print(name)
 							replaceAll(file, line, name)
 	else:
@@ -394,7 +394,7 @@ if args.recluster is 'T':
 								linspl=line.split(' ')[0]
 								linspl2=linspl.split('_')
 								print(linspl2)
-								name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
+								name = '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
 								print(name)
 								replaceAll(file, line, name)
 		else:
@@ -409,7 +409,7 @@ if args.recluster is 'T':
 									linspl=line.split(' ')[0]
 									linspl2=linspl.split('_')
 									print(linspl2)
-									name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '\n'
+									name = '>' + linspl2[2] + '_' + linspl2[3] + '\n'
 									print(name)
 									replaceAll(file, line, name)
 			else:
@@ -507,7 +507,7 @@ else:
 	   						for id in baitid1:
 	   							if id in line:
 	   								print(line)
-	   								name = line[:-999999999] + '>' + folder[:-9] + '_' + id + '\n'
+	   								name = '>' + folder[:-9] + '_' + id + '\n'
 	   								print(name)
 	   								replaceAll(file, line, name)		
 	os.chdir(args.workingdir)
@@ -555,7 +555,7 @@ else:
 	   					for line in infile:
 	   						if '>' in line:
 	   							print(line)
-	   							name = line[:-100] + '>' + folder[:-9] + '_' + file[:-8] + '\n'
+	   							name = '>' + folder[:-9] + '_' + file[:-8] + '\n'
 	   							print(name)
 	   							replaceAll(file, line, name)		
 	os.chdir(args.workingdir)
@@ -760,7 +760,7 @@ else:
 	   								print(line)
 	   								linspl=line.split('_')
 	   								print(linspl)
-	   								name = line[:-100] + linspl[0] + '_' + cid + linspl[1] + '_' + linspl[2] + '_'+ linspl[3]
+	   								name = linspl[0] + '_' + cid + linspl[1] + '_' + linspl[2] + '_'+ linspl[3]
 	   								print(name)
 	   								replaceAll(file, line, name)
 
@@ -873,7 +873,7 @@ else:
 							linspl=line.split(' ')[0]
 							linspl2=linspl.split('_')
 							print(linspl2)
-							name = line[:-1000] + linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
+							name = linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
 							print(name)
 							replaceAll(file, line, name)
 	else:
@@ -888,7 +888,7 @@ else:
 								linspl=line.split(' ')[0]
 								linspl2=linspl.split('_')
 								print(linspl2)
-								name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
+								name =  '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
 								print(name)
 								replaceAll(file, line, name)
 		else:
@@ -903,7 +903,7 @@ else:
 									linspl=line.split(' ')[0]
 									linspl2=linspl.split('_')
 									print(linspl2)
-									name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '\n'
+									name = '>' + linspl2[2] + '_' + linspl2[3] + '\n'
 									print(name)
 									replaceAll(file, line, name)
 			else:
