@@ -250,7 +250,7 @@ else:
 		   						for id in baitid1:
 		   							if id in line:
 		   								print(line)
-		   								name = line[:-100] + '>' + folder[:-9] + '_' + id + '\n'
+		   								name = '>' + folder[:-9] + '_' + id + '\n'
 		   								print(name)
 		   								replaceAll(file, line, name)		
 		os.chdir(phaseset)
@@ -314,7 +314,7 @@ else:
 		   					for line in infile:
 		   						if '>' in line:
 		   							print(line)
-		   							name = line[:-100] + '>' + folder[:-9] + '_' + file[:-8] + '\n'
+		   							name =  '>' + folder[:-9] + '_' + file[:-8] + '\n'
 		   							print(name)
 		   							replaceAll(file, line, name)		
 		os.chdir(phaseset)
@@ -584,7 +584,7 @@ else:
 									print(line)
 									linspl=line.split('_')
 									print(linspl)
-									name = line[:-100] + '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '_' + linspl[5]
+									name = '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '_' + linspl[5]
 									print(name)
 									replaceAll(file, line, name)
 
@@ -603,7 +603,7 @@ else:
 										print(line)
 										linspl=line.split('_')
 										print(linspl)
-										name = name = line[:-100] + '>' + linspl[2] + '_' + linspl[3] + '\n'
+										name = '>' + linspl[2] + '_' + linspl[3] + '\n'
 										print(name)
 										replaceAll(file, line, name)
 
@@ -647,7 +647,7 @@ else:
 								if '>' in line:
 									print(line)
 									linspl=line.split(' ')
-									name = line[:-100] + linspl[0] + '\n'
+									name = linspl[0] + '\n'
 									print(name)
 									replaceAll(file, line, name)
 
@@ -677,7 +677,7 @@ else:
 									print(line)
 									linspl=line.split('_')
 									print(linspl)
-									name = line[:-100] + linspl[0] + '_' + linspl[1] + '_' + linspl[3]
+									name = linspl[0] + '_' + linspl[1] + '_' + linspl[3]
 									print(name)
 									replaceAll(file, line, name)
 
@@ -706,7 +706,7 @@ else:
 									print(line)
 									linspl=line.split('_')
 									print(linspl)
-									name = line[:-100] + linspl[0] + '_' + linspl[1] + '_' + linspl[2] + '\n' 
+									name = linspl[0] + '_' + linspl[1] + '_' + linspl[2] + '\n' 
 									print(name)
 									replaceAll(file, line, name)
 
