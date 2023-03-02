@@ -455,7 +455,7 @@ if 'full' in args.idformat:
 						linspl=line.split(' ')[0]
 						linspl2=linspl.split('_')
 						print(linspl2)
-						name = line[:-1000] + linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] +'_' +linspl2[5] +'\n'
+						name = linspl2[0] + '_' + linspl2[1] + '_' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] +'_' +linspl2[5] +'\n'
 						print(name)
 						replaceAll(file, line, name)
 	sys.exit('Kept full sequence ID annotations; e.g. >L100_cl0_WA10_sampleid_0')
@@ -471,7 +471,7 @@ else:
 							linspl=line.split(' ')[0]
 							linspl2=linspl.split('_')
 							print(linspl2)
-							name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
+							name = '>' + linspl2[2] + '_' + linspl2[3] + '_' + linspl2[4] + '\n'
 							print(name)
 							replaceAll(file, line, name)
 		sys.exit('Annotated alignments as: >@@##_sampleid_0/1 (annotated with phase)')
@@ -486,7 +486,7 @@ else:
 								linspl=line.split(' ')[0]
 								linspl2=linspl.split('_')
 								print(linspl2)
-								name = line[:-1000] + '>' + linspl2[2] + '_' + linspl2[3] + '_' + '\n'
+								name = '>' + linspl2[2] + '_' + linspl2[3] + '_' + '\n'
 								print(name)
 								replaceAll(file, line, name)
 				sys.exit('Annotated alignments as: >@@##_sampleid (no phase annotations)')
