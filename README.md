@@ -26,7 +26,7 @@ Biopython (Python 2.7.x)
 
 Perl
 
-Trim Galore v 0.6.4 (with cutadapt v1.1B)
+Trim Galore v 0.6.4 (with cutadapt v1.1B and FastQC v0.12.1)
 
 bwa v 0.7.17-r1188
 
