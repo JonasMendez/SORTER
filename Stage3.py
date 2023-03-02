@@ -181,7 +181,7 @@ for folder in os.listdir(phaseset):
    						for id in baitid1:
    							if id in line:
    								print(line)
-   								name = line[:-100] + '>' + folder[:-9] + '_' + id + '\n'
+   								name = '>' + folder[:-9] + '_' + id + '\n'
    								print(name)
    								replaceAll(file, line, name)		
 os.chdir(phaseset)
@@ -228,7 +228,7 @@ for folder in os.listdir(phaseset):
    					for line in infile:
    						if '>' in line:
    							print(line)
-   							name = line[:-100] + '>' + folder[:-9] + '_' + file[:-8] + '\n'
+   							name = '>' + folder[:-9] + '_' + file[:-8] + '\n'
    							print(name)
    							replaceAll(file, line, name)		
 os.chdir(phaseset)
@@ -490,7 +490,7 @@ for folder in os.listdir(phaseset):
 							print(line)
 							linspl=line.split('_')
 							print(linspl)
-							name = line[:-100] + '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '_' + linspl[5]
+							name = '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '_' + linspl[5]
 							print(name)
 							replaceAll(file, line, name)
 
@@ -507,7 +507,6 @@ for file in os.listdir(phaseset+'diploidclusters_phased/'):
 		with open(file, 'r') as infile:
 			for line in infile:
 				for hyb in os.listdir(phaseset):
-						# if sample not in hyb:
 					if "diploidclusters" not in hyb:
 						hybid = hyb.split('_')[0] +'_' + hyb.split('_')[1]
 						if '>' in line:
@@ -515,12 +514,10 @@ for file in os.listdir(phaseset+'diploidclusters_phased/'):
 							# print(line)
 							# print(len(linspl1))
 							if len(linspl1) > 5:
-							# if hybid not in line:
-							# 	# if sample not in line:
 								print(line)
 								linspl=line.split('_')
 								print(linspl)
-								name = name = line[:-100] + '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '\n'
+								name = name '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '\n'
 								print(name)
 								replaceAll(file, line, name)
 
@@ -555,6 +552,6 @@ for file in os.listdir(phaseset+'diploidclusters_phased/'):
 				if '>' in line:
 					print(line)
 					linspl=line.split(' ')
-					name = line[:-100] + linspl[0] + '\n'
+					name = linspl[0] + '\n'
 					print(name)
 					replaceAll(file, line, name)
