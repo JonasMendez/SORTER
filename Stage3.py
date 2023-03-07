@@ -312,7 +312,8 @@ for file in os.listdir(phaseset):
 				os.remove(file[:-9] + '_allcontigs_allbaits_annotated.fasta' )
 				
 
-# os.chdir(phaseset)
+os.chdir(phaseset)
+
 # # #Map reads to locus-clustered contig-cluster references
 for folder in os.listdir(phaseset):
 	if 'R1' in folder:
