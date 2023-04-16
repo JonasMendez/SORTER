@@ -6,7 +6,9 @@ Jonas Mendez-Reneau1, Erin Sigel2, Gordon Burleigh3
 2. University of New Hampshire, Durham
 3. University of Florida, Gainesville
 
-CURRENT VERSION IS A PRE-RELEASE AWAITING PUBLICATION
+If you use SORTER for your study, please cite the following publication:
+
+Jonas Mendez-Reneau, J. Gordon Burleigh, and Erin M. Sigel "Target Capture Methods Offer Insight into the Evolution of Rapidly Diverged Taxa and Resolve Allopolyploid Homeologs in the Fern Genus Polypodium s.s.," Systematic Botany 48(1), 96-109, (28 March 2023). https://doi.org/10.1600/036364423X16758873924135
 
 SORTER is a flexible user-customizable set of python scripts for building a variety of locus-alignment matrices from target-enrichment datasets. The three overarching goals of the pipeline are to:
 
