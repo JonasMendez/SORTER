@@ -281,13 +281,5 @@ Command line example:
 
 python Stage3.py -wd /workingdirectory/cleanfastq/ -ref /workingdirectory/cleanfastq/references.fasta -loci 450 -c1 .99 -cs contig -csn 20 -csl 300 -pq 20 -al 1000 -indel 0.20
 
-#### Note on using pipeline for homoploid hybrids vs allopolyploid hybrids:
-
-This approach may not be appropriate for diploid homoploid hybrids where phased bi-allelic haplotypes (i.e. diploid alleles) are representative of alternative or recombined progenitor genomes (though we assume this is fairly rare to detect in a reduced represantation dataset) as opposed to allopolyploids that mostly retain the full bi-allelic variation (i.e. chromosomes) associated with each progenitor. Assuming homoploidy, two phased haplotype pairs associated with alternative progenitor taxa in the same locus are assumed to represent recombination points at the given loci, potentially duplicated regions, or low sequence quality. In either case it is probably better to filter these loci assuming homoploid hybrids should have one hyrbid progenitor represented at each locus.
-
-In this context, UBLAST annotations for these loci represent the progenitor taxon that the sequence was more similar to, even if the actual haplotype has SNPS associated with disparate progenitor taxa. Recombination and associated assembly error may result in ambiguous placement of hybrid haplotypes on a phylogeny (i.e. subtending progenitor clades with low node support). A possible way to identify and filter recombined sequences or samples would be to inspect the hits.txt ouptut files found in each hybrid sample directory to assess the % identity of each haplotype relative to its the top progenitor hit and only keep sequences or samples meeting dpecific % identity thresholds (i.e. >99% identity to confidently associate a hybrid haplotype with a specific progenitor).
-
-In the case of allopolyploids we would expect most loci to be "chimeric" or have all progenitors represented at most loci; thus a conservative filter is to only analyze loci with all (or most) progenitors represented. Latter coverage may be more limited in allopolyploids with more than two progenitor contributions and higher ploidy levels. In the case of allopolyploids, it is most appropriate to have atleast two progenitors represented per locus, as loci with only a single progenitor represented may be due to the pipeline not being able to differentiate homeologous sequences, though variable sequencing coverage or genome fractionation are also factors that would result in this.
-
 
 
