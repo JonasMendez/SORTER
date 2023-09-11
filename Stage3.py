@@ -518,7 +518,7 @@ for file in os.listdir(phaseset+'diploidclusters_phased/'):
 								print(line)
 								linspl=line.split('_')
 								print(linspl)
-								name = name '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '\n'
+								name = '>' + linspl[2] + '_' + linspl[3] + '_' + linspl[4] + '\n'
 								print(name)
 								replaceAll(file, line, name)
 
