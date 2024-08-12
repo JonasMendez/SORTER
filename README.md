@@ -10,7 +10,7 @@ If you use SORTER for your study, please cite the following publication:
 
 Jonas Mendez-Reneau, J. Gordon Burleigh, and Erin M. Sigel "Target Capture Methods Offer Insight into the Evolution of Rapidly Diverged Taxa and Resolve Allopolyploid Homeologs in the Fern Genus Polypodium s.s.," Systematic Botany 48(1), 96-109, (28 March 2023). https://doi.org/10.1600/036364423X16758873924135
 
-We have now released SORTER2-Toolkit that has been optimized for user set-up, improved compatibility, additional summary statistics, and new tools for identifying hybrids and progenitors. We encourage users to use SORTER2 going forward, visit: https://github.com/JonasMendez/SORTER2
+As of August 2024, we have released a newer version of SORTER; The SORTER2-Toolkit has been optimized for user set-up, improved compatibility, additional summary statistics, and new tools for identifying hybrids and progenitors. We encourage users to use SORTER2 going forward, visit: https://github.com/JonasMendez/SORTER2
 
 SORTER is a flexible user-customizable set of python scripts for building a variety of locus-alignment matrices from target-enrichment datasets. The three overarching goals of the pipeline are to:
 
